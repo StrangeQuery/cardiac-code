@@ -2,27 +2,24 @@ A CARDIAC quine: it punches the deck that loads it.
 
 cell  contents   notes
  03     003      the address to punch next; it starts as its own address, 03
- 04     518      OUT 18   punch 002, the loader's first card      <- starts here
- 05     519      OUT 19   punch 800, the loader's second card
+ 04     519      OUT 19   punch 002, the first bootstrap card      <- starts here
+ 05     520      OUT 20   punch 800, the second bootstrap card
  06     503      OUT 03   punch the address card
  07     103      CLA 03   take the address
- 08     220      ADD 20   add 500, making "OUT address"
+ 08     221      ADD 21   add 500, making "OUT address"
  09     610      STO 10   put that instruction in cell 10
- 10     510      OUT 10   (rewritten every time: OUT address) punch the value card
+ 10     510      OUT 10   (rewritten every time: OUT address) punch the data card
  11     103      CLA 03
- 12     221      ADD 21   next address
+ 12     222      ADD 22   next address
  13     603      STO 03
- 14     723      SUB 23   past the last cell yet?
+ 14     724      SUB 24   past the last cell yet?
  15     306      TAC 06   no: punch the next pair
- 16     522      OUT 22   punch 804, the card that jumps to the start
- 17     900      HRS 00   halt
- 18     002      data: the loader's first card
- 19     800      data: the loader's second card
- 20     500      data: 500, the OUT instruction with address 00
- 21     001      data: 1
- 22     804      data: the last card, JMP 04
- 23     024      data: 24, one past the last cell
-
-Two cells change while it runs, and each starts out holding what it holds at the moment it is punched: cell 03
-holds the address being punched, so when it punches cell 03 it holds 03; cell 10 is rewritten to OUT address
-before it runs, so when the address is 10 it holds 510. There is no JMP, because JMP writes cell 99.
+ 16     519      OUT 19   punch 002 ...
+ 17     523      OUT 23   ... and 804: the pair that puts JMP 04 in cell 02
+ 18     900      HRS 00   halt
+ 19     002      data: 002
+ 20     800      data: 800
+ 21     500      data: 500, the OUT instruction with address 00
+ 22     001      data: 1
+ 23     804      data: 804, JMP 04
+ 24     025      data: 25, one past the last cell
