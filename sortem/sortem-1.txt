@@ -50,7 +50,7 @@ cell  contents   notes
  49     161      CLA 61
  50     000               set by the program before it runs
  51     830      JMP 30
- 52     902      HRS 02
+ 52     902      HRS 02   halt: put tape 2 in the reader and start at 00
  53     001      data: 1
  54     000      data: 0
  55     035      data: 35, how many numbers
