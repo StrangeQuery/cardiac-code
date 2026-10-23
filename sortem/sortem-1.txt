@@ -1,0 +1,66 @@
+sortem, tape 1 of 2: read 35 numbers into cells 64-98 and sort them in place, then halt with the bug on 02 (load tape 2).
+
+cell  contents   notes
+ 03     154      CLA 54         <- starts here
+ 04     657      STO 57
+ 05     158      CLA 58   build INP 64+i
+ 06     257      ADD 57
+ 07     608      STO 08
+ 08     000               set by the program before it runs: INP 64+i
+ 09     157      CLA 57
+ 10     253      ADD 53
+ 11     657      STO 57
+ 12     755      SUB 55
+ 13     305      TAC 05
+ 14     155      CLA 55   N-1 passes of bubble sort
+ 15     753      SUB 53
+ 16     663      STO 63
+ 17     154      CLA 54
+ 18     660      STO 60
+ 19     156      CLA 56   build CLA 64+j and CLA 64+j+1
+ 20     260      ADD 60
+ 21     624      STO 24
+ 22     253      ADD 53
+ 23     626      STO 26
+ 24     000               set by the program before it runs
+ 25     661      STO 61
+ 26     000               set by the program before it runs
+ 27     662      STO 62
+ 28     761      SUB 61   second minus first < 0: out of order
+ 29     342      TAC 42
+ 30     160      CLA 60
+ 31     253      ADD 53
+ 32     660      STO 60
+ 33     253      ADD 53
+ 34     755      SUB 55
+ 35     319      TAC 19
+ 36     163      CLA 63
+ 37     753      SUB 53
+ 38     663      STO 63
+ 39     753      SUB 53
+ 40     352      TAC 52
+ 41     817      JMP 17
+ 42     159      CLA 59   build STO 64+j and STO 64+j+1
+ 43     260      ADD 60
+ 44     648      STO 48
+ 45     253      ADD 53
+ 46     650      STO 50
+ 47     162      CLA 62
+ 48     000               set by the program before it runs
+ 49     161      CLA 61
+ 50     000               set by the program before it runs
+ 51     830      JMP 30
+ 52     902      HRS 02
+ 53     001      data: 1
+ 54     000      data: 0
+ 55     035      data: 35, how many numbers
+ 56     164      data: CLA 64: an instruction the program copies and changes
+ 57     000      data: counter i
+ 58     064      data: INP 64: an instruction the program copies and changes
+ 59     664      data: STO 64: an instruction the program copies and changes
+ 60     000      data: counter j
+ 61     000      data: the first of the two numbers compared
+ 62     000      data: the second
+ 63     000      data: passes left
+
+cells 64-98 hold the numbers.

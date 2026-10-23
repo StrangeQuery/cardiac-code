@@ -1,0 +1,101 @@
+sortem, in one tape: read 2 numbers, sort them, print them sorted, then their mean, minimum, maximum and median.
+
+cell  contents   notes
+ 03     184      CLA 84         <- starts here
+ 04     687      STO 87
+ 05     188      CLA 88   build INP 97+i
+ 06     287      ADD 87
+ 07     608      STO 08
+ 08     000               set by the program before it runs: INP 97+i
+ 09     187      CLA 87
+ 10     283      ADD 83
+ 11     687      STO 87
+ 12     785      SUB 85
+ 13     305      TAC 05
+ 14     185      CLA 85   N-1 passes of bubble sort
+ 15     783      SUB 83
+ 16     693      STO 93
+ 17     184      CLA 84
+ 18     690      STO 90
+ 19     186      CLA 86   build CLA 97+j and CLA 97+j+1
+ 20     290      ADD 90
+ 21     624      STO 24
+ 22     283      ADD 83
+ 23     626      STO 26
+ 24     000               set by the program before it runs
+ 25     691      STO 91
+ 26     000               set by the program before it runs
+ 27     692      STO 92
+ 28     791      SUB 91   second minus first < 0: out of order
+ 29     342      TAC 42
+ 30     190      CLA 90
+ 31     283      ADD 83
+ 32     690      STO 90
+ 33     283      ADD 83
+ 34     785      SUB 85
+ 35     319      TAC 19
+ 36     193      CLA 93
+ 37     783      SUB 83
+ 38     693      STO 93
+ 39     783      SUB 83
+ 40     352      TAC 52
+ 41     817      JMP 17
+ 42     189      CLA 89   build STO 97+j and STO 97+j+1
+ 43     290      ADD 90
+ 44     648      STO 48
+ 45     283      ADD 83
+ 46     650      STO 50
+ 47     192      CLA 92
+ 48     000               set by the program before it runs
+ 49     191      CLA 91
+ 50     000               set by the program before it runs
+ 51     830      JMP 30
+ 52     184      CLA 84
+ 53     687      STO 87
+ 54     694      STO 94
+ 55     186      CLA 86   build CLA 97+i
+ 56     287      ADD 87
+ 57     658      STO 58
+ 58     000               set by the program before it runs
+ 59     695      STO 95
+ 60     595      OUT 95   the sorted numbers
+ 61     294      ADD 94
+ 62     694      STO 94
+ 63     187      CLA 87
+ 64     283      ADD 83
+ 65     687      STO 87
+ 66     785      SUB 85
+ 67     355      TAC 55
+ 68     184      CLA 84   mean = sum / N, by subtracting
+ 69     696      STO 96
+ 70     194      CLA 94
+ 71     785      SUB 85
+ 72     378      TAC 78
+ 73     694      STO 94
+ 74     196      CLA 96
+ 75     283      ADD 83
+ 76     696      STO 96
+ 77     870      JMP 70
+ 78     596      OUT 96   mean
+ 79     597      OUT 97   min
+ 80     598      OUT 98   max
+ 81     598      OUT 98   median
+ 82     900      HRS 00
+ 83     001      data: 1
+ 84     000      data: 0
+ 85     002      data: 2, how many numbers
+ 86     197      data: CLA 97: an instruction the program copies and changes
+ 87     000      data: counter i
+ 88     097      data: INP 97: an instruction the program copies and changes
+ 89     697      data: STO 97: an instruction the program copies and changes
+ 90     000      data: counter j
+ 91     000      data: the first of the two numbers compared
+ 92     000      data: the second
+ 93     000      data: passes left
+ 94     000      data: the total
+ 95     000      data: the number just printed
+ 96     000      data: the mean, counted up
+ 97     000      data: the numbers
+ 98     000      data:
+
+cells 97-98 hold the numbers.

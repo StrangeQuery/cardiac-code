@@ -1,0 +1,44 @@
+sortem, tape 2 of 2: cells 64-98 already hold the sorted numbers; print them, then their mean, minimum, maximum and median.
+
+cell  contents   notes
+ 03     135      CLA 35         <- starts here
+ 04     638      STO 38
+ 05     639      STO 39
+ 06     137      CLA 37   build CLA 64+i
+ 07     238      ADD 38
+ 08     609      STO 09
+ 09     000               set by the program before it runs
+ 10     640      STO 40
+ 11     540      OUT 40   the sorted numbers
+ 12     239      ADD 39
+ 13     639      STO 39
+ 14     138      CLA 38
+ 15     234      ADD 34
+ 16     638      STO 38
+ 17     736      SUB 36
+ 18     306      TAC 06
+ 19     135      CLA 35   mean = sum / N, by subtracting
+ 20     641      STO 41
+ 21     139      CLA 39
+ 22     736      SUB 36
+ 23     329      TAC 29
+ 24     639      STO 39
+ 25     141      CLA 41
+ 26     234      ADD 34
+ 27     641      STO 41
+ 28     821      JMP 21
+ 29     541      OUT 41   mean
+ 30     564      OUT 64   min
+ 31     598      OUT 98   max
+ 32     581      OUT 81   median
+ 33     900      HRS 00
+ 34     001      data: 1
+ 35     000      data: 0
+ 36     035      data: 35, how many numbers
+ 37     164      data: CLA 64: an instruction the program copies and changes
+ 38     000      data: counter i
+ 39     000      data: the total
+ 40     000      data: the number just printed
+ 41     000      data: the mean, counted up
+
+cells 64-98 hold the numbers.

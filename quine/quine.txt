@@ -1,0 +1,28 @@
+A CARDIAC quine: it punches the deck that loads it.
+
+cell  contents   notes
+ 03     003      the address to punch next; it starts as its own address, 03
+ 04     518      OUT 18   punch 002, the loader's first card      <- starts here
+ 05     519      OUT 19   punch 800, the loader's second card
+ 06     503      OUT 03   punch the address card
+ 07     103      CLA 03   take the address
+ 08     220      ADD 20   add 500, making "OUT address"
+ 09     610      STO 10   put that instruction in cell 10
+ 10     510      OUT 10   (rewritten every time: OUT address) punch the value card
+ 11     103      CLA 03
+ 12     221      ADD 21   next address
+ 13     603      STO 03
+ 14     723      SUB 23   past the last cell yet?
+ 15     306      TAC 06   no: punch the next pair
+ 16     522      OUT 22   punch 804, the card that jumps to the start
+ 17     900      HRS 00   halt
+ 18     002      data: the loader's first card
+ 19     800      data: the loader's second card
+ 20     500      data: 500, the OUT instruction with address 00
+ 21     001      data: 1
+ 22     804      data: the last card, JMP 04
+ 23     024      data: 24, one past the last cell
+
+Two cells change while it runs, and each starts out holding what it holds at the moment it is punched: cell 03
+holds the address being punched, so when it punches cell 03 it holds 03; cell 10 is rewritten to OUT address
+before it runs, so when the address is 10 it holds 510. There is no JMP, because JMP writes cell 99.
