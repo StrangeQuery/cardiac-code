@@ -10,3 +10,8 @@ cells (03–23), and the card that jumps to its start. Load what it punches and 
 Two cells change while it runs, and each starts out holding what it holds at the moment it is punched. Cell 03
 holds the address being punched, so it starts as 03. Cell 10 is rewritten to "OUT address" before it runs, so
 when the address reaches 10 it holds 510. There is no JMP in it, because JMP writes cell 99.
+
+The decks follow the manual's loading program (its Program No. 7): the bootstrap cards 002 and 800, then an
+addressing instruction and a program word for each cell. The manual ends a deck with a BLANK card, which stops
+the loading, and the operator then sets the bug on the program's first instruction. These decks end instead
+with a card that jumps to it (8xx), so that a simulator starts the program by itself.
