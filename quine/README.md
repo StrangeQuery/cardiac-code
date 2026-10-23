@@ -1,13 +1,12 @@
 # quine
 
-A CARDIAC program that punches its own deck: the two-card loader, an address and a value card for each of its 21
-cells, and the card that jumps to its start. Feed what it punches back in as a tape and you get the same 45 cards
-again, forever.
+A program that punches its own deck: the two loader cards, an address card and a value card for each of its 21
+cells (03–23), and the card that jumps to its start. Load what it punches and run it, and it punches the same
+45 cards again.
 
-    heartburn asm quine.asm
-    heartburn run quine.tape
+- `quine.txt`: the program, cell by cell, with notes.
+- `quine.tape`: the deck, one card per line. No input cards.
 
-The catch is self-modifying code: a cell the program changes while it runs would be punched with its changed value.
-So each such cell starts out holding what it holds at the moment it is punched. The loop counter `a` lives in cell 03
-and starts at 3, its own address; `doit`, where the loop builds `OUT a`, starts as `OUT doit`, which is what it holds
-when the loop reaches it. No JMP, because JMP writes cell 99.
+Two cells change while it runs, and each starts out holding what it holds at the moment it is punched. Cell 03
+holds the address being punched, so it starts as 03. Cell 10 is rewritten to "OUT address" before it runs, so
+when the address reaches 10 it holds 510. There is no JMP in it, because JMP writes cell 99.

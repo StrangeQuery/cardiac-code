@@ -1,5 +1,3 @@
-# sortem.tape: assembled from sortem.asm by heartburn asm
-# CARDIAC cards, one per line, read from the top. The program's input goes after them.
 002
 800
 003
