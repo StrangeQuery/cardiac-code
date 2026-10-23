@@ -13,3 +13,8 @@ To run the two-tape version: load tape 1 followed by 35 number cards and start a
 on 02, put tape 2 in the reader and start at 00 again. Same machine, 35 numbers instead of 2.
 
 The mean keeps its total in one cell, so the numbers must add up to 999 or less.
+
+The decks follow the manual's loading program (its Program No. 7): the bootstrap cards 002 and 800, then an
+addressing instruction and a program word for each cell. The manual ends a deck with a BLANK card, which stops
+the loading, and the operator then sets the bug on the program's first instruction. These decks end instead
+with a card that jumps to it (8xx), so that a simulator starts the program by itself.
