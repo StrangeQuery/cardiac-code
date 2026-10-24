@@ -54,3 +54,9 @@ cells, so its idioms are about comparisons, digits and room.
 21. **When it doesn't fit, split it.** Two small programs passing cards often fit where one big one doesn't. When
     the code is too big but the data must stay, chain tapes: the first ends with HRS n, the operator loads tape n
     and starts at 00, and the cells the new tape doesn't load keep their values (see sortem).
+22. **Add 500 to turn an instruction into its partner.** The ten instructions pair up five apart: INP and OUT (0
+    and 5), CLA and STO (1 and 6), ADD and SUB (2 and 7), TAC and JMP (3 and 8), SFT and HRS (4 and 9). A cell keeps
+    only three digits, so adding 500 to an instruction and storing it turns it into its partner, and doing it again
+    turns it back: 251 (ADD 51) becomes 751 (SUB 51), and 751 + 500 = 1251 is stored as 251. If cell 30 holds the
+    instruction and cell 43 holds 500, then CLA 30, ADD 43, STO 30 flips it, with no test: a sum that alternates
+    between adding and subtracting, a conditional jump that becomes unconditional, a reader that becomes a punch.
