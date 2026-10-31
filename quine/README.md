@@ -4,8 +4,8 @@ A program that punches its own deck: the two loader cards, an address card and a
 cells (03–24), and the pair that starts it. Load what it punches and run it, and it punches the same 48
 cards again.
 
-- `quine.txt`: the program, cell by cell, with notes.
-- `quine.tape`: the deck, one card per line. No input cards.
+- `quine.cardiac`: the program, cell by cell, with notes.
+- `quine.deck`: the deck, one card per line. No input cards.
 
 Two cells change while it runs, and each starts out holding what it holds at the moment it is punched. Cell 03
 holds the address being punched, so it starts as 03. Cell 10 is rewritten to "OUT address" before it runs, so

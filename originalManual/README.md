@@ -17,7 +17,7 @@ manual's own columns, with the page it is on.
 - `09-nim`: Program No. 9, Single-Pile Nim (Ten Pebbles) (page 41). Start at 00, or at 01 for CARDIAC first.
 - `10-improved-nim`: Program No. 10, Improved Nim Game (pages 47-48). Start at 52, or at 53 for CARDIAC first.
 
-Each folder has the program as printed (`.txt`), its deck (`.tape`), and a README: what it does, where to start
+Each folder has the program as printed (`.cardiac`), its deck (`.deck`), and a README: what it does, where to start
 it, what goes on the input cards, and what it printed.
 
 The decks are laid out as Brian Stuart describes on his CARDIAC page: the bootstrap cards 002 and 800, an

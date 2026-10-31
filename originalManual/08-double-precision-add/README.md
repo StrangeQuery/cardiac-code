@@ -5,8 +5,8 @@ significant digits in the first. The main program reads the numbers and calls th
 op code 8; the subroutine takes its return address from cell 99, adds the low halves, carries, adds the high
 halves, and returns.
 
-- `double-precision-add.txt`: the subroutine and the main program as printed.
-- `double-precision-add.tape`: the deck. No input cards. Cell 94 ("8__") has no card: the subroutine writes
+- `double-precision-add.cardiac`: the subroutine and the main program as printed.
+- `double-precision-add.deck`: the deck. No input cards. Cell 94 ("8__") has no card: the subroutine writes
   it (cells 86-87) before it gets there.
 
 Put the bug in cell 50. Input cards: 1, the three most significant digits of A; 2, the three least

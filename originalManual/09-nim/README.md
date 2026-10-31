@@ -6,8 +6,8 @@ the player (0 for CARDIAC, 5 for you), the pebbles taken, the pebbles left. Your
 01 and run as an instruction: 5xy is "print cell xy", and cell xy of the look-up table holds CARDIAC's reply.
 Cell 02 halts and resets the bug to 00, ready for your next card.
 
-- `nim.txt`: the program and the look-up table as printed.
-- `nim.tape`: the deck. No input cards. The program lives in the loader's own cells 01 and 02, so the deck
+- `nim.cardiac`: the program and the look-up table as printed.
+- `nim.deck`: the deck. No input cards. The program lives in the loader's own cells 01 and 02, so the deck
   loads the table first, then 002 900 (cell 02; the halt runs at once and stops the machine with the bug on
   00), then 001 529 (cell 01; it stops again with the bug on 00). Start again after the first stop.
 

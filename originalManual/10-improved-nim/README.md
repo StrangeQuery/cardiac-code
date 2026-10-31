@@ -5,10 +5,10 @@ fours as it holds), builds the instruction "CLA PR" from your move P and R, and 
 C in a sixteen-entry table. Each turn it prints N after your move, its move C, and N after its move, then
 halts with the bug on 52 for your next card.
 
-- `improved-nim.txt`: the program, the table of CARDIAC's moves, the table of constants and variables, and
+- `improved-nim.cardiac`: the program, the table of CARDIAC's moves, the table of constants and variables, and
   the directions, as printed.
-- `improved-nim-player-first.tape`: the deck with N = 13 in cells 14 and 17, started at 52. No input cards.
-- `improved-nim-cardiac-first.tape`: the deck with N = 15, started at 53. No input cards.
+- `improved-nim-player-first.deck`: the deck with N = 13 in cells 14 and 17, started at 52. No input cards.
+- `improved-nim-cardiac-first.deck`: the deck with N = 15, started at 53. No input cards.
 
 The starting pile is the card after 014 and the card after 017 (the manual's N(start)); change both for
 another pile. Cells 01 and 02 of the table (001 and 002) are not in the decks: the loader runs in those cells.
