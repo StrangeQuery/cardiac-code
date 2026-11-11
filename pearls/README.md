@@ -34,6 +34,8 @@ so it pays to make it the question you need.
     32      042    what the body prints
    ```
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=put-the-threshold-at-0-and-make-the-thing-you-test-reach-it-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20130%20%20%20%20CLA%2030%20%20cells%2010-13%3A%20still%20below%205%3F%20TAC%20into%20the%20body%2C%20else%20JMP%20out%0A%2011%20%20%20%20%20%20731%20%20%20%20SUB%2031%0A%2012%20%20%20%20%20%20314%20%20%20%20TAC%2014%0A%2013%20%20%20%20%20%20819%20%20%20%20JMP%2019%0A%2014%20%20%20%20%20%20532%20%20%20%20OUT%2032%20%20cells%2014-19%3A%20the%20body%2C%20then%20count%20one%20more%20and%20go%20back%20to%20the%20test%0A%2015%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2016%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2017%20%20%20%20%20%20630%20%20%20%20STO%2030%0A%2018%20%20%20%20%20%20810%20%20%20%20JMP%2010%0A%2019%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%20%20%20%20the%20count%0A%2031%20%20%20%20%20%20005%20%20%20%20the%20limit%0A%2032%20%20%20%20%20%20042%20%20%20%20what%20the%20body%20prints%0A)
+
    Here's the trick: count from -5 up to 0 instead, and test at the bottom. TAC only ever asks "is this below zero?",
    and while your count is still negative the answer is yes, so TAC's jump is what takes you round again. There's no
    limit to subtract, and both JMPs disappear.
@@ -49,6 +51,8 @@ so it pays to make it the question you need.
     30     -005    the count, from -5
     32      042    what the body prints
    ```
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=put-the-threshold-at-0-and-make-the-thing-you-test-reach-it-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20532%20%20%20%20OUT%2032%20%20cells%2010-15%3A%20the%20body%2C%20then%20count%20up%3B%20TAC%20goes%20round%20while%20the%20count%20is%20negative%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2013%20%20%20%20%20%20630%20%20%20%20STO%2030%0A%2014%20%20%20%20%20%20310%20%20%20%20TAC%2010%0A%2015%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20-005%20%20%20%20the%20count%2C%20from%20-5%0A%2032%20%20%20%20%20%20042%20%20%20%20what%20the%20body%20prints%0A)
 
    Both print 42 five times. The first takes 13 cells and runs 45 instructions; the second takes 8 cells and runs 26.
    Same loop, a lot less work, and you'll find this shape all over good CARDIAC code.
@@ -78,6 +82,8 @@ so it pays to make it the question you need.
    ```
    <!-- input: 3 3 4 5 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=let-negative-mean-none-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-21%3A%20the%20first%20card%20says%20how%20many%20follow%3B%20count%20it%20down%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20700%20%20%20%20SUB%2000%0A%2013%20%20%20%20%20%20320%20%20%20%20TAC%2020%0A%2014%20%20%20%20%20%20630%20%20%20%20STO%2030%0A%2015%20%20%20%20%20%20031%20%20%20%20INP%2031%0A%2016%20%20%20%20%20%20132%20%20%20%20CLA%2032%0A%2017%20%20%20%20%20%20231%20%20%20%20ADD%2031%0A%2018%20%20%20%20%20%20632%20%20%20%20STO%2032%0A%2019%20%20%20%20%20%20811%20%20%20%20JMP%2011%0A%2020%20%20%20%20%20%20532%20%20%20%20OUT%2032%0A%2021%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%20%20%20%20how%20many%20cards%20are%20left%0A%2031%20%20%20%20%20%20000%0A%2032%20%20%20%20%20%20000%0A&in=3%203%204%205)
+
    Instead, end the stack with a -1. You're already loading each card into the accumulator to add it, so spotting the
    end costs you nothing but the TAC, and -1 can never be mistaken for a real card. Once you start doing this you'll
    see uses everywhere: -1 for "not found", "off the edge", "no more". Whatever you're testing for, make it the
@@ -97,6 +103,8 @@ so it pays to make it the question you need.
     31      000
    ```
    <!-- input: 3 4 5 -1 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=let-negative-mean-none-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-17%3A%20add%20up%20cards%20until%20a%20negative%20one%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20316%20%20%20%20TAC%2016%20%20-1%20means%20no%20more%20cards%0A%2013%20%20%20%20%20%20231%20%20%20%20ADD%2031%0A%2014%20%20%20%20%20%20631%20%20%20%20STO%2031%0A%2015%20%20%20%20%20%20810%20%20%20%20JMP%2010%0A%2016%20%20%20%20%20%20531%20%20%20%20OUT%2031%0A%2017%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%0A%2031%20%20%20%20%20%20000%0A&in=3%204%205%20-1)
 
    Both add up 3, 4 and 5 and print 12. The counted version takes 15 cells and runs 33 instructions; the -1 version
    takes 10 cells and runs 23.
@@ -123,6 +131,8 @@ so it pays to make it the question you need.
    ```
    <!-- input: 1 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=keep-a-flag-as-0-and-1-not-1-and-0-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-17%3A%20the%20flag%20is%201%20or%200%3B%20testing%20it%20needs%20a%20SUB%20first%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20700%20%20%20%20SUB%2000%0A%2013%20%20%20%20%20%20316%20%20%20%20TAC%2016%0A%2014%20%20%20%20%20%20531%20%20%20%20OUT%2031%20%20set%3A%20print%201%0A%2015%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2016%20%20%20%20%20%20532%20%20%20%20OUT%2032%20%20clear%3A%20print%200%0A%2017%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%20%20%20%20the%20flag%0A%2031%20%20%20%20%20%20001%0A%2032%20%20%20%20%20%20000%0A&in=1)
+
    So store them that way to begin with: 0 for yes, -1 for no. Now each test is just CLA and TAC. It isn't quite
    free, because you need a cell holding -1 somewhere to set the flag to no, but that pays for itself from the second
    test on.
@@ -140,6 +150,8 @@ so it pays to make it the question you need.
     31      000
    ```
    <!-- input: 0 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=keep-a-flag-as-0-and-1-not-1-and-0-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-16%3A%20the%20flag%20is%200%20or%20-1%3B%20reading%20it%20is%20CLA%20and%20TAC%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20315%20%20%20%20TAC%2015%0A%2013%20%20%20%20%20%20500%20%20%20%20OUT%2000%20%20set%3A%20print%201%0A%2014%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2015%20%20%20%20%20%20531%20%20%20%20OUT%2031%20%20clear%3A%20print%200%0A%2016%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%20%20%20%20the%20flag%0A%2031%20%20%20%20%20%20000%0A&in=0)
 
    Both print 1 for yes. The 1-and-0 version takes 11 cells and runs 6 instructions; the 0-and-minus-1 version takes
    9 cells and runs 5. That's one of each saved, every single time you test the flag.
@@ -165,6 +177,8 @@ so it pays to make it the question you need.
     31      007
    ```
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=equality-is-the-expensive-test-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20530%20%20%20%20OUT%2030%20%20cells%2010-19%3A%20print%20the%20count%2C%20count%20one%20more%2C%20go%20round%20while%20it%20isn%27t%207%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2013%20%20%20%20%20%20630%20%20%20%20STO%2030%0A%2014%20%20%20%20%20%20731%20%20%20%20SUB%2031%20%20i%20-%207%3A%20below%3F%0A%2015%20%20%20%20%20%20310%20%20%20%20TAC%2010%0A%2016%20%20%20%20%20%20131%20%20%20%20CLA%2031%20%207%20-%20i%3A%20above%3F%0A%2017%20%20%20%20%20%20730%20%20%20%20SUB%2030%0A%2018%20%20%20%20%20%20310%20%20%20%20TAC%2010%0A%2019%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%20%20%20%20the%20count%0A%2031%20%20%20%20%20%20007%0A)
+
    Think about what you actually know. A count that goes up one at a time can't skip past 7, so the moment it stops
    being below 7, it is 7. Ask only "below 7?" and you're done. When you really do need equality, ask the likely half
    first. Here the count is below 7 on every pass but the last, which is why the first version's second question only
@@ -182,6 +196,8 @@ so it pays to make it the question you need.
     30      000    the count
     31      007
    ```
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=equality-is-the-expensive-test-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20530%20%20%20%20OUT%2030%20%20cells%2010-16%3A%20the%20same%20loop%2C%20asking%20only%20whether%20the%20count%20is%20below%207%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2013%20%20%20%20%20%20630%20%20%20%20STO%2030%0A%2014%20%20%20%20%20%20731%20%20%20%20SUB%2031%0A%2015%20%20%20%20%20%20310%20%20%20%20TAC%2010%0A%2016%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%20%20%20%20the%20count%0A%2031%20%20%20%20%20%20007%0A)
 
    Both print 0 through 6. The equality version takes 12 cells and runs 46 instructions; the below-7 version takes 9
    cells and runs 43. In a loop where both halves ran every time, you'd be saving three instructions a pass.
@@ -207,6 +223,8 @@ so it pays to make it the question you need.
    ```
    <!-- input: 4 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=ask-the-cheap-question-first-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-18%3A%20a%20digit%20is%20at%20least%200%20and%20below%2010%3A%20two%20tests%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20315%20%20%20%20TAC%2015%0A%2013%20%20%20%20%20%20731%20%20%20%20SUB%2031%0A%2014%20%20%20%20%20%20317%20%20%20%20TAC%2017%0A%2015%20%20%20%20%20%20532%20%20%20%20OUT%2032%0A%2016%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2017%20%20%20%20%20%20500%20%20%20%20OUT%2000%20%20a%20single%20digit%3A%20print%201%0A%2018%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%20%20%20%20a%20count%20of%20cards%0A%2031%20%20%20%20%20%20010%0A%2032%20%20%20%20%20%20000%0A&in=4)
+
    But look at where the value came from. If it's counting cards, it can't be negative, so the first question has
    already been answered for you and only "below 10?" is left. It's worth getting into the habit of ordering your
    tests so that what you already know answers the later ones.
@@ -226,6 +244,8 @@ so it pays to make it the question you need.
     32      000
    ```
    <!-- input: 4 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=ask-the-cheap-question-first-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-17%3A%20x%20counts%20cards%2C%20so%20it%20is%20never%20negative%3B%20one%20test%20is%20enough%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20731%20%20%20%20SUB%2031%0A%2013%20%20%20%20%20%20316%20%20%20%20TAC%2016%0A%2014%20%20%20%20%20%20532%20%20%20%20OUT%2032%0A%2015%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2016%20%20%20%20%20%20500%20%20%20%20OUT%2000%20%20a%20single%20digit%3A%20print%201%0A%2017%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%20%20%20%20a%20count%20of%20cards%0A%2031%20%20%20%20%20%20010%0A%2032%20%20%20%20%20%20000%0A&in=4)
 
    Both print 1 for 4. Asking both takes 12 cells and runs 7 instructions; asking one takes 11 cells and runs 6.
 
@@ -252,6 +272,8 @@ so it pays to make it the question you need.
    ```
    <!-- input: 1 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=store-the-sign-not-the-number-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-13%3A%20whose%20turn%2C%201%20for%20A%20and%202%20for%20B%3B%203%20-%20turn%20swaps%20them%0A%2011%20%20%20%20%20%20132%20%20%20%20CLA%2032%0A%2012%20%20%20%20%20%20730%20%20%20%20SUB%2030%0A%2013%20%20%20%20%20%20630%20%20%20%20STO%2030%0A%2014%20%20%20%20%20%20731%20%20%20%20SUB%2031%20%20cells%2014-19%3A%20which%20is%20it%3F%20a%20SUB%20first%2C%20then%20the%20TAC%0A%2015%20%20%20%20%20%20318%20%20%20%20TAC%2018%0A%2016%20%20%20%20%20%20531%20%20%20%20OUT%2031%20%20B%27s%20turn%3A%20print%202%0A%2017%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2018%20%20%20%20%20%20500%20%20%20%20OUT%2000%20%20A%27s%20turn%3A%20print%201%0A%2019%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%0A%2031%20%20%20%20%20%20002%0A%2032%20%20%20%20%20%20003%0A&in=1)
+
    Number them 0 and -1 instead. Swapping becomes -1 minus the turn, and finding out whose turn it is is the TAC on
    its own. Any time you're choosing between two things, you can store the choice as a sign.
 
@@ -271,6 +293,8 @@ so it pays to make it the question you need.
     32      002
    ```
    <!-- input: 0 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=store-the-sign-not-the-number-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-18%3A%20whose%20turn%2C%200%20for%20A%20and%20-1%20for%20B%3B%20-1%20-%20turn%20swaps%20them%0A%2011%20%20%20%20%20%20131%20%20%20%20CLA%2031%0A%2012%20%20%20%20%20%20730%20%20%20%20SUB%2030%0A%2013%20%20%20%20%20%20630%20%20%20%20STO%2030%0A%2014%20%20%20%20%20%20317%20%20%20%20TAC%2017%20%20one%20TAC%20reads%20it%0A%2015%20%20%20%20%20%20500%20%20%20%20OUT%2000%20%20A%27s%20turn%3A%20print%201%0A%2016%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2017%20%20%20%20%20%20532%20%20%20%20OUT%2032%20%20B%27s%20turn%3A%20print%202%0A%2018%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%0A%2031%20%20%20%20%20-001%0A%2032%20%20%20%20%20%20002%0A&in=0)
 
    Both swap A's turn to B's and print 2. Numbering 1 and 2 takes 13 cells and runs 8 instructions; 0 and -1 takes 12
    cells and runs 7.
@@ -301,6 +325,8 @@ so it pays to make it the question you need.
    ```
    <!-- input: 2 5 9 1 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=dont-test-what-you-just-set-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-14%3A%20read%20cards%20until%20one%20is%207%20or%20more%2C%20or%20a%20negative%20one%20ends%20them%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20317%20%20%20%20TAC%2017%0A%2013%20%20%20%20%20%20731%20%20%20%20SUB%2031%0A%2014%20%20%20%20%20%20310%20%20%20%20TAC%2010%0A%2015%20%20%20%20%20%20133%20%20%20%20CLA%2033%20%20cells%2015-16%3A%20found%3A%20set%20the%20flag%20and%20leave%20the%20loop%0A%2016%20%20%20%20%20%20632%20%20%20%20STO%2032%0A%2017%20%20%20%20%20%20132%20%20%20%20CLA%2032%20%20cells%2017-20%3A%20after%20the%20loop%2C%20test%20the%20flag%0A%2018%20%20%20%20%20%20320%20%20%20%20TAC%2020%0A%2019%20%20%20%20%20%20530%20%20%20%20OUT%2030%0A%2020%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%0A%2031%20%20%20%20%20%20007%0A%2032%20%20%20%20%20-001%20%20%20%20the%20flag%3A%20-1%20not%20found%2C%200%20found%0A%2033%20%20%20%20%20%20000%0A&in=2%205%209%201)
+
    But at the moment you find the card, you already know you found it: the loop's own test just told you. So do the
    work right there and skip the flag entirely. Whenever you're about to set something and then jump to a test of it,
    jump straight to the answer instead.
@@ -318,6 +344,8 @@ so it pays to make it the question you need.
     31      007
    ```
    <!-- input: 2 5 9 1 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=dont-test-what-you-just-set-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-16%3A%20read%20cards%20until%20one%20is%207%20or%20more%2C%20or%20a%20negative%20one%20ends%20them%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20316%20%20%20%20TAC%2016%0A%2013%20%20%20%20%20%20731%20%20%20%20SUB%2031%0A%2014%20%20%20%20%20%20310%20%20%20%20TAC%2010%0A%2015%20%20%20%20%20%20530%20%20%20%20OUT%2030%20%20found%3A%20act%20on%20it%20here%2C%20where%20the%20loop%27s%20own%20test%20already%20said%20so%0A%2016%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%0A%2031%20%20%20%20%20%20007%0A&in=2%205%209%201)
 
    Both print 9. The flag version takes 15 cells and runs 21 instructions; acting on the spot takes 9 cells and runs
    17.
@@ -355,6 +383,8 @@ so it pays to make it the question you need.
    ```
    <!-- input: 12 7 2 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=park-the-number-you-subtract-keep-the-other-in-the-accumulator-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-15%3A%20a%20%3D%20x%20%2B%20y%2C%20stored%0A%2011%20%20%20%20%20%20041%20%20%20%20INP%2041%0A%2012%20%20%20%20%20%20042%20%20%20%20INP%2042%0A%2013%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2014%20%20%20%20%20%20241%20%20%20%20ADD%2041%0A%2015%20%20%20%20%20%20643%20%20%20%20STO%2043%0A%2016%20%20%20%20%20%20142%20%20%20%20CLA%2042%20%20cells%2016-18%3A%20b%20%3D%2010z%2C%20stored%0A%2017%20%20%20%20%20%20410%20%20%20%20SFT%2010%0A%2018%20%20%20%20%20%20644%20%20%20%20STO%2044%0A%2019%20%20%20%20%20%20144%20%20%20%20CLA%2044%20%20cells%2019-26%3A%20load%20b%20again%20and%20test%20b%20-%20a%20-%201%0A%2020%20%20%20%20%20%20743%20%20%20%20SUB%2043%0A%2021%20%20%20%20%20%20700%20%20%20%20SUB%2000%0A%2022%20%20%20%20%20%20325%20%20%20%20TAC%2025%0A%2023%20%20%20%20%20%20500%20%20%20%20OUT%2000%20%20a%20%3C%20b%3A%20print%201%0A%2024%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2025%20%20%20%20%20%20545%20%20%20%20OUT%2045%0A%2026%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20000%0A%2041%20%20%20%20%20%20000%0A%2042%20%20%20%20%20%20000%0A%2043%20%20%20%20%20%20000%0A%2044%20%20%20%20%20%20000%0A%2045%20%20%20%20%20%20000%0A&in=12%207%202)
+
    Here's the thing: CARDIAC can only subtract a cell, so only the number you subtract has to be stored. Store a,
    work out b, and while b is still sitting in the accumulator, subtract a straight away. For "a < b" you test b - a
    - 1 against zero, and the 1 comes free from cell 00.
@@ -383,6 +413,8 @@ so it pays to make it the question you need.
     44      000
    ```
    <!-- input: 12 7 2 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=park-the-number-you-subtract-keep-the-other-in-the-accumulator-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-15%3A%20a%20%3D%20x%20%2B%20y%2C%20stored%2C%20because%20it%20is%20the%20one%20subtracted%0A%2011%20%20%20%20%20%20041%20%20%20%20INP%2041%0A%2012%20%20%20%20%20%20042%20%20%20%20INP%2042%0A%2013%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2014%20%20%20%20%20%20241%20%20%20%20ADD%2041%0A%2015%20%20%20%20%20%20643%20%20%20%20STO%2043%0A%2016%20%20%20%20%20%20142%20%20%20%20CLA%2042%20%20cells%2016-24%3A%20b%20%3D%2010z%20stays%20in%20the%20accumulator%3B%20test%20b%20-%20a%20-%201%0A%2017%20%20%20%20%20%20410%20%20%20%20SFT%2010%0A%2018%20%20%20%20%20%20743%20%20%20%20SUB%2043%0A%2019%20%20%20%20%20%20700%20%20%20%20SUB%2000%0A%2020%20%20%20%20%20%20323%20%20%20%20TAC%2023%0A%2021%20%20%20%20%20%20500%20%20%20%20OUT%2000%20%20a%20%3C%20b%3A%20print%201%0A%2022%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2023%20%20%20%20%20%20544%20%20%20%20OUT%2044%0A%2024%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20000%0A%2041%20%20%20%20%20%20000%0A%2042%20%20%20%20%20%20000%0A%2043%20%20%20%20%20%20000%0A%2044%20%20%20%20%20%20000%0A&in=12%207%202)
 
    Both compare 19 with 20 and print 1. Storing both takes 23 cells and runs 15 instructions; parking only a takes 20
    cells and runs 13.
@@ -419,6 +451,8 @@ so it pays to make it the question you need.
    ```
    <!-- input: 9 0 2 1 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=encode-so-one-comparison-decides-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-13%3A%20each%20card%20as%20a%20value%2C%200-9%2C%20and%20a%20trump%20flag%2C%201%20or%200%0A%2011%20%20%20%20%20%20041%20%20%20%20INP%2041%0A%2012%20%20%20%20%20%20042%20%20%20%20INP%2042%0A%2013%20%20%20%20%20%20043%20%20%20%20INP%2043%0A%2014%20%20%20%20%20%20141%20%20%20%20CLA%2041%20%20cells%2014-16%3A%20b%20is%20a%20trump%20and%20a%20isn%27t%3A%20b%20wins%0A%2015%20%20%20%20%20%20743%20%20%20%20SUB%2043%0A%2016%20%20%20%20%20%20325%20%20%20%20TAC%2025%0A%2017%20%20%20%20%20%20143%20%20%20%20CLA%2043%20%20cells%2017-19%3A%20a%20is%20a%20trump%20and%20b%20isn%27t%3A%20a%20wins%0A%2018%20%20%20%20%20%20741%20%20%20%20SUB%2041%0A%2019%20%20%20%20%20%20323%20%20%20%20TAC%2023%0A%2020%20%20%20%20%20%20140%20%20%20%20CLA%2040%20%20cells%2020-26%3A%20both%20or%20neither%3A%20the%20higher%20value%20wins%0A%2021%20%20%20%20%20%20742%20%20%20%20SUB%2042%0A%2022%20%20%20%20%20%20325%20%20%20%20TAC%2025%0A%2023%20%20%20%20%20%20540%20%20%20%20OUT%2040%0A%2024%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2025%20%20%20%20%20%20542%20%20%20%20OUT%2042%0A%2026%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20000%0A%2041%20%20%20%20%20%20000%0A%2042%20%20%20%20%20%20000%0A%2043%20%20%20%20%20%20000%0A&in=9%200%202%201)
+
    Instead, store a trump with 10 added. Now every trump is higher than every plain card, "higher wins" is the whole
    rule, and one compare settles it. It's a nice example of choosing your numbers so the comparison you'd make anyway
    gives the answer you want.
@@ -438,6 +472,8 @@ so it pays to make it the question you need.
     41      000
    ```
    <!-- input: 9 12 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=encode-so-one-comparison-decides-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-18%3A%20a%20plain%20card%20is%200-9%20and%20a%20trump%20is%20stored%20with%2010%20added%3B%20one%20compare%20decides%0A%2011%20%20%20%20%20%20041%20%20%20%20INP%2041%0A%2012%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2013%20%20%20%20%20%20741%20%20%20%20SUB%2041%0A%2014%20%20%20%20%20%20317%20%20%20%20TAC%2017%0A%2015%20%20%20%20%20%20540%20%20%20%20OUT%2040%0A%2016%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2017%20%20%20%20%20%20541%20%20%20%20OUT%2041%0A%2018%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20000%0A%2041%20%20%20%20%20%20000%0A&in=9%2012)
 
    A plain 9 meets the trump 2, and the trump wins: the first version prints 2, and the second prints the trump the
    way it stores it, 12. The flags take 21 cells and run 9 instructions; the encoding takes 11 cells and runs 7.
@@ -466,6 +502,8 @@ so it pays to make it the question you need.
      42      000
     ```
     <!-- input: 600 -->
+
+    [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=classify-with-comparisons-not-division-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-20%3A%20the%20band%20is%20x%20%2F%20250%2C%20by%20subtracting%20250%20until%20x%20goes%20negative%0A%2011%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2012%20%20%20%20%20%20741%20%20%20%20SUB%2041%0A%2013%20%20%20%20%20%20319%20%20%20%20TAC%2019%0A%2014%20%20%20%20%20%20640%20%20%20%20STO%2040%0A%2015%20%20%20%20%20%20142%20%20%20%20CLA%2042%0A%2016%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2017%20%20%20%20%20%20642%20%20%20%20STO%2042%0A%2018%20%20%20%20%20%20811%20%20%20%20JMP%2011%0A%2019%20%20%20%20%20%20542%20%20%20%20OUT%2042%0A%2020%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20000%0A%2041%20%20%20%20%20%20250%0A%2042%20%20%20%20%20%20000%0A&in=600)
 
     Just ask three questions in a row instead: below 250? below 500? below 750? Each is a SUB and a TAC on whatever
     the last one left in the accumulator.
@@ -496,6 +534,8 @@ so it pays to make it the question you need.
     ```
     <!-- input: 600 -->
 
+    [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=classify-with-comparisons-not-division-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-25%3A%20three%20compares%20sort%20x%20into%20four%20bands%0A%2011%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2012%20%20%20%20%20%20741%20%20%20%20SUB%2041%20%20x%20-%20250%0A%2013%20%20%20%20%20%20320%20%20%20%20TAC%2020%0A%2014%20%20%20%20%20%20741%20%20%20%20SUB%2041%20%20x%20-%20500%0A%2015%20%20%20%20%20%20322%20%20%20%20TAC%2022%0A%2016%20%20%20%20%20%20741%20%20%20%20SUB%2041%20%20x%20-%20750%0A%2017%20%20%20%20%20%20324%20%20%20%20TAC%2024%0A%2018%20%20%20%20%20%20544%20%20%20%20OUT%2044%0A%2019%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2020%20%20%20%20%20%20542%20%20%20%20OUT%2042%0A%2021%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2022%20%20%20%20%20%20500%20%20%20%20OUT%2000%0A%2023%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2024%20%20%20%20%20%20543%20%20%20%20OUT%2043%0A%2025%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20000%0A%2041%20%20%20%20%20%20250%0A%2042%20%20%20%20%20%20000%0A%2043%20%20%20%20%20%20002%0A%2044%20%20%20%20%20%20003%0A&in=600)
+
     Both put 600 in band 2. This one's a trade: the comparisons take more cells, 21 against 14, because each band
     needs its own way out. But they run 10 instructions where the division ran 22, and they never get slower.
 
@@ -525,6 +565,8 @@ on that and a lot of arithmetic gets cheap.
    ```
    <!-- input: 7 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=scale-by-ten-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-19%3A%20x%20times%208%2C%20doubled%20three%20times%20through%20a%20spare%20cell%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20230%20%20%20%20ADD%2030%0A%2013%20%20%20%20%20%20631%20%20%20%20STO%2031%0A%2014%20%20%20%20%20%20231%20%20%20%20ADD%2031%0A%2015%20%20%20%20%20%20631%20%20%20%20STO%2031%0A%2016%20%20%20%20%20%20231%20%20%20%20ADD%2031%0A%2017%20%20%20%20%20%20631%20%20%20%20STO%2031%0A%2018%20%20%20%20%20%20531%20%20%20%20OUT%2031%0A%2019%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%0A%2031%20%20%20%20%20%20000%0A&in=7)
+
    Pick 10 instead. SFT moves whole decimal digits, so times 10 is a single shift. Ten's friends are cheap too: times
    20 is one doubling and a shift, and times 100 is just a bigger shift.
 
@@ -540,6 +582,8 @@ on that and a lot of arithmetic gets cheap.
     31      000
    ```
    <!-- input: 7 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=scale-by-ten-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-15%3A%20x%20times%2010%20is%20one%20shift%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20410%20%20%20%20SFT%2010%0A%2013%20%20%20%20%20%20631%20%20%20%20STO%2031%0A%2014%20%20%20%20%20%20531%20%20%20%20OUT%2031%0A%2015%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%0A%2031%20%20%20%20%20%20000%0A&in=7)
 
    Times 8 prints 56 and times 10 prints 70. Times 8 takes 12 cells and runs 10 instructions; times 10 takes 8 cells
    and runs 6.
@@ -579,6 +623,8 @@ on that and a lot of arithmetic gets cheap.
    ```
    <!-- input: 123 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=fold-the-multiply-into-the-shift-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-19%3A%20cut%20out%20each%20digit%3A%20c%2C%20then%20b%2C%20then%20a%0A%2011%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2012%20%20%20%20%20%20433%20%20%20%20SFT%2033%0A%2013%20%20%20%20%20%20643%20%20%20%20STO%2043%0A%2014%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2015%20%20%20%20%20%20423%20%20%20%20SFT%2023%0A%2016%20%20%20%20%20%20642%20%20%20%20STO%2042%0A%2017%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2018%20%20%20%20%20%20413%20%20%20%20SFT%2013%0A%2019%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2020%20%20%20%20%20%20143%20%20%20%20CLA%2043%20%20cells%2020-29%3A%20then%20put%20each%20in%20its%20place%20and%20add%20them%20up%0A%2021%20%20%20%20%20%20420%20%20%20%20SFT%2020%0A%2022%20%20%20%20%20%20644%20%20%20%20STO%2044%0A%2023%20%20%20%20%20%20142%20%20%20%20CLA%2042%0A%2024%20%20%20%20%20%20410%20%20%20%20SFT%2010%0A%2025%20%20%20%20%20%20244%20%20%20%20ADD%2044%0A%2026%20%20%20%20%20%20241%20%20%20%20ADD%2041%0A%2027%20%20%20%20%20%20644%20%20%20%20STO%2044%0A%2028%20%20%20%20%20%20544%20%20%20%20OUT%2044%0A%2029%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20000%0A%2041%20%20%20%20%20%20000%0A%2042%20%20%20%20%20%20000%0A%2043%20%20%20%20%20%20000%0A%2044%20%20%20%20%20%20000%0A&in=123)
+
    Here's what makes SFT so handy: SFT xy shifts left x places and then right y, and whatever falls off either end is
    gone. That means one shift can cut a digit out and drop it where it belongs, all at once. From abc, SFT 31 gives
    you c00, and SFT 13 gives you 00a. Add each piece to a running total as you go. This is how the manual's own
@@ -605,6 +651,8 @@ on that and a lot of arithmetic gets cheap.
     41      000
    ```
    <!-- input: 123 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=fold-the-multiply-into-the-shift-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-24%3A%20each%20shift%20cuts%20a%20digit%20out%20and%20puts%20it%20in%20its%20new%20place%20at%20once%0A%2011%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2012%20%20%20%20%20%20431%20%20%20%20SFT%2031%20%20c00%0A%2013%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2014%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2015%20%20%20%20%20%20423%20%20%20%20SFT%2023%20%2000b%0A%2016%20%20%20%20%20%20410%20%20%20%20SFT%2010%20%200b0%0A%2017%20%20%20%20%20%20241%20%20%20%20ADD%2041%0A%2018%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2019%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2020%20%20%20%20%20%20413%20%20%20%20SFT%2013%20%2000a%0A%2021%20%20%20%20%20%20241%20%20%20%20ADD%2041%0A%2022%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2023%20%20%20%20%20%20541%20%20%20%20OUT%2041%0A%2024%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20000%0A%2041%20%20%20%20%20%20000%0A&in=123)
 
    Both turn 123 into 321. Cutting and placing separately takes 25 cells and runs 20 instructions; folding them
    together takes 17 cells and runs 15.
@@ -640,6 +688,8 @@ on that and a lot of arithmetic gets cheap.
    ```
    <!-- input: 100 7 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=divide-by-walking-and-stop-when-the-answer-stops-mattering-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-19%3A%20divide%20all%20the%20way%3A%20how%20many%20times%20d%20goes%20into%20x%0A%2011%20%20%20%20%20%20041%20%20%20%20INP%2041%0A%2012%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2013%20%20%20%20%20%20741%20%20%20%20SUB%2041%0A%2014%20%20%20%20%20%20320%20%20%20%20TAC%2020%0A%2015%20%20%20%20%20%20640%20%20%20%20STO%2040%0A%2016%20%20%20%20%20%20142%20%20%20%20CLA%2042%0A%2017%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2018%20%20%20%20%20%20642%20%20%20%20STO%2042%0A%2019%20%20%20%20%20%20812%20%20%20%20JMP%2012%0A%2020%20%20%20%20%20%20142%20%20%20%20CLA%2042%20%20cells%2020-26%3A%20then%20cut%20the%20answer%20down%20to%203%0A%2021%20%20%20%20%20%20743%20%20%20%20SUB%2043%0A%2022%20%20%20%20%20%20325%20%20%20%20TAC%2025%0A%2023%20%20%20%20%20%20143%20%20%20%20CLA%2043%0A%2024%20%20%20%20%20%20642%20%20%20%20STO%2042%0A%2025%20%20%20%20%20%20542%20%20%20%20OUT%2042%0A%2026%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20000%0A%2041%20%20%20%20%20%20000%0A%2042%20%20%20%20%20%20000%20%20%20%20the%20count%0A%2043%20%20%20%20%20%20003%0A&in=100%207)
+
    Since CARDIAC divides by walking, one subtraction at a time anyway, you can simply stop walking the moment the
    answer reaches 3. Everything after that would be work you throw away.
 
@@ -664,6 +714,8 @@ on that and a lot of arithmetic gets cheap.
     43      003
    ```
    <!-- input: 100 7 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=divide-by-walking-and-stop-when-the-answer-stops-mattering-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-22%3A%20walk%2C%20and%20stop%20as%20soon%20as%20the%20count%20reaches%203%0A%2011%20%20%20%20%20%20041%20%20%20%20INP%2041%0A%2012%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2013%20%20%20%20%20%20741%20%20%20%20SUB%2041%0A%2014%20%20%20%20%20%20321%20%20%20%20TAC%2021%0A%2015%20%20%20%20%20%20640%20%20%20%20STO%2040%0A%2016%20%20%20%20%20%20142%20%20%20%20CLA%2042%0A%2017%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2018%20%20%20%20%20%20642%20%20%20%20STO%2042%0A%2019%20%20%20%20%20%20743%20%20%20%20SUB%2043%0A%2020%20%20%20%20%20%20312%20%20%20%20TAC%2012%20%20under%203%3A%20keep%20walking%0A%2021%20%20%20%20%20%20542%20%20%20%20OUT%2042%0A%2022%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20000%0A%2041%20%20%20%20%20%20000%0A%2042%20%20%20%20%20%20000%20%20%20%20the%20count%0A%2043%20%20%20%20%20%20003%0A&in=100%207)
 
    Both print 3. Dividing all the way takes 21 cells and runs 124 instructions; stopping at 3 takes 17 cells and runs
    31.
@@ -703,6 +755,8 @@ on that and a lot of arithmetic gets cheap.
    ```
    <!-- input: 33 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=halve-before-you-square-check-the-box-first-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cell%2010%3A%20dx%2C%20up%20to%2060%20from%20the%20middle%0A%2011%20%20%20%20%20%20144%20%20%20%20CLA%2044%20%20cells%2011-27%3A%20dx%20squared%3A%20add%20dx%20to%20itself%20dx%20times%2C%20counting%20up%20from%20-dx%0A%2012%20%20%20%20%20%20740%20%20%20%20SUB%2040%0A%2013%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2014%20%20%20%20%20%20142%20%20%20%20CLA%2042%0A%2015%20%20%20%20%20%20240%20%20%20%20ADD%2040%0A%2016%20%20%20%20%20%20642%20%20%20%20STO%2042%0A%2017%20%20%20%20%20%20141%20%20%20%20CLA%2041%0A%2018%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2019%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2020%20%20%20%20%20%20314%20%20%20%20TAC%2014%0A%2021%20%20%20%20%20%20142%20%20%20%20CLA%2042%20%20inside%20when%20dx%20squared%20is%20below%20r%20squared%2C%20400%0A%2022%20%20%20%20%20%20743%20%20%20%20SUB%2043%0A%2023%20%20%20%20%20%20326%20%20%20%20TAC%2026%0A%2024%20%20%20%20%20%20544%20%20%20%20OUT%2044%0A%2025%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2026%20%20%20%20%20%20500%20%20%20%20OUT%2000%20%20inside%3A%20print%201%0A%2027%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20000%0A%2041%20%20%20%20%20%20000%0A%2042%20%20%20%20%20%20000%20%20%20%20dx%20squared%2C%20kept%20in%20a%20cell%3A%20only%20its%20last%20three%20digits%0A%2043%20%20%20%20%20%20400%0A%2044%20%20%20%20%20%20000%0A&in=33)
+
    So check the box first. If dx isn't below 20, the point is outside and there's nothing to square at all. Inside
    the box, dx is under 20, and its square fits in a cell just fine. If you really do need squares across the whole
    range, halve first: 30 squared is 900, which fits.
@@ -741,6 +795,8 @@ on that and a lot of arithmetic gets cheap.
    ```
    <!-- input: 33 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=halve-before-you-square-check-the-box-first-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-15%3A%20first%20the%20box%3A%20dx%20not%20below%20r%20means%20outside%2C%20with%20no%20square%20at%20all%0A%2011%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2012%20%20%20%20%20%20743%20%20%20%20SUB%2043%0A%2013%20%20%20%20%20%20316%20%20%20%20TAC%2016%0A%2014%20%20%20%20%20%20545%20%20%20%20OUT%2045%0A%2015%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2016%20%20%20%20%20%20145%20%20%20%20CLA%2045%20%20cells%2016-32%3A%20dx%20squared%3A%20add%20dx%20to%20itself%20dx%20times%2C%20counting%20up%20from%20-dx%0A%2017%20%20%20%20%20%20740%20%20%20%20SUB%2040%0A%2018%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2019%20%20%20%20%20%20142%20%20%20%20CLA%2042%0A%2020%20%20%20%20%20%20240%20%20%20%20ADD%2040%0A%2021%20%20%20%20%20%20642%20%20%20%20STO%2042%0A%2022%20%20%20%20%20%20141%20%20%20%20CLA%2041%0A%2023%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2024%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2025%20%20%20%20%20%20319%20%20%20%20TAC%2019%0A%2026%20%20%20%20%20%20142%20%20%20%20CLA%2042%20%20inside%20the%20box%2C%20dx%20is%20below%2020%2C%20and%20its%20square%20fits%0A%2027%20%20%20%20%20%20744%20%20%20%20SUB%2044%0A%2028%20%20%20%20%20%20331%20%20%20%20TAC%2031%0A%2029%20%20%20%20%20%20545%20%20%20%20OUT%2045%0A%2030%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2031%20%20%20%20%20%20500%20%20%20%20OUT%2000%20%20inside%3A%20print%201%0A%2032%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20000%0A%2041%20%20%20%20%20%20000%0A%2042%20%20%20%20%20%20000%0A%2043%20%20%20%20%20%20020%0A%2044%20%20%20%20%20%20400%0A%2045%20%20%20%20%20%20000%0A&in=33)
+
    The first version prints 1, which is wrong, after 240 instructions. The second prints 0, which is right, after 6.
    It does take more cells, 29 against 23, because it has the box check as well as the square.
 
@@ -774,6 +830,8 @@ on that and a lot of arithmetic gets cheap.
    ```
    <!-- input: 999 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=fit-the-arithmetic-to-three-digits-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-19%3A%2021s%20by%20adding%20s%2021%20times%3B%20STO%20keeps%20three%20digits%20each%20time%0A%2011%20%20%20%20%20%20141%20%20%20%20CLA%2041%0A%2012%20%20%20%20%20%20642%20%20%20%20STO%2042%0A%2013%20%20%20%20%20%20143%20%20%20%20CLA%2043%0A%2014%20%20%20%20%20%20240%20%20%20%20ADD%2040%0A%2015%20%20%20%20%20%20643%20%20%20%20STO%2043%0A%2016%20%20%20%20%20%20142%20%20%20%20CLA%2042%0A%2017%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2018%20%20%20%20%20%20642%20%20%20%20STO%2042%0A%2019%20%20%20%20%20%20313%20%20%20%20TAC%2013%0A%2020%20%20%20%20%20%20143%20%20%20%20CLA%2043%20%20cells%2020-24%3A%20then%20add%2017%0A%2021%20%20%20%20%20%20244%20%20%20%20ADD%2044%0A%2022%20%20%20%20%20%20643%20%20%20%20STO%2043%0A%2023%20%20%20%20%20%20543%20%20%20%20OUT%2043%0A%2024%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20000%0A%2041%20%20%20%20%20-021%0A%2042%20%20%20%20%20%20000%0A%2043%20%20%20%20%20%20000%0A%2044%20%20%20%20%20%20017%0A&in=999)
+
    With a little rearranging, nothing in the formula needs more than four digits. 21s is 20s + s, and 20s mod 1000 is
    10 times (2s mod 100). SFT 22 keeps the last two digits, which is your mod 100. SFT 10 multiplies by ten. And the
    final STO does the mod 1000 for you.
@@ -795,6 +853,8 @@ on that and a lot of arithmetic gets cheap.
     42      000
    ```
    <!-- input: 999 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=fit-the-arithmetic-to-three-digits-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-19%3A%2021s%20%2B%2017%20as%2010%20%282s%20mod%20100%29%20%2B%20s%20%2B%2017%0A%2011%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2012%20%20%20%20%20%20240%20%20%20%20ADD%2040%20%202s%0A%2013%20%20%20%20%20%20422%20%20%20%20SFT%2022%20%202s%20mod%20100%0A%2014%20%20%20%20%20%20410%20%20%20%20SFT%2010%20%2010%20%282s%20mod%20100%29%2C%20never%20past%20990%0A%2015%20%20%20%20%20%20240%20%20%20%20ADD%2040%0A%2016%20%20%20%20%20%20241%20%20%20%20ADD%2041%0A%2017%20%20%20%20%20%20642%20%20%20%20STO%2042%20%20STO%20keeps%20three%20digits%3A%20the%20mod%201000%0A%2018%20%20%20%20%20%20542%20%20%20%20OUT%2042%0A%2019%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20000%0A%2041%20%20%20%20%20%20017%0A%2042%20%20%20%20%20%20000%0A&in=999)
 
    Both turn 999 into 996. The loop takes 20 cells and runs 155 instructions; the rearranged version takes 13 cells
    and runs 10.
@@ -835,6 +895,8 @@ on that and a lot of arithmetic gets cheap.
    ```
    <!-- input: 472 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=spend-every-digit-of-a-random-number-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20050%20%20%20%20INP%2050%20%20cells%2010-31%3A%20the%20seed%0A%2011%20%20%20%20%20%20150%20%20%20%20CLA%2050%20%20cells%2011-17%3A%20the%20next%20random%20number%2C%20s%20%3D%20%2821s%20%2B%2017%29%20mod%201000%0A%2012%20%20%20%20%20%20250%20%20%20%20ADD%2050%0A%2013%20%20%20%20%20%20422%20%20%20%20SFT%2022%0A%2014%20%20%20%20%20%20410%20%20%20%20SFT%2010%0A%2015%20%20%20%20%20%20250%20%20%20%20ADD%2050%0A%2016%20%20%20%20%20%20251%20%20%20%20ADD%2051%0A%2017%20%20%20%20%20%20650%20%20%20%20STO%2050%0A%2018%20%20%20%20%20%20433%20%20%20%20SFT%2033%20%20a%20digit%2C%200-9%2C%20from%20the%20first%20draw%0A%2019%20%20%20%20%20%20652%20%20%20%20STO%2052%0A%2020%20%20%20%20%20%20150%20%20%20%20CLA%2050%20%20cells%2020-26%3A%20the%20next%20random%20number%2C%20s%20%3D%20%2821s%20%2B%2017%29%20mod%201000%0A%2021%20%20%20%20%20%20250%20%20%20%20ADD%2050%0A%2022%20%20%20%20%20%20422%20%20%20%20SFT%2022%0A%2023%20%20%20%20%20%20410%20%20%20%20SFT%2010%0A%2024%20%20%20%20%20%20250%20%20%20%20ADD%2050%0A%2025%20%20%20%20%20%20251%20%20%20%20ADD%2051%0A%2026%20%20%20%20%20%20650%20%20%20%20STO%2050%0A%2027%20%20%20%20%20%20422%20%20%20%20SFT%2022%20%20a%20number%2C%200-99%2C%20from%20a%20second%20draw%0A%2028%20%20%20%20%20%20653%20%20%20%20STO%2053%0A%2029%20%20%20%20%20%20552%20%20%20%20OUT%2052%0A%2030%20%20%20%20%20%20553%20%20%20%20OUT%2053%0A%2031%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2050%20%20%20%20%20%20000%0A%2051%20%20%20%20%20%20017%0A%2052%20%20%20%20%20%20000%0A%2053%20%20%20%20%20%20000%0A&in=472)
+
    But a three-digit random number has three digits in it, and you only need three. Draw once, take the digit from
    the end and the 0 to 99 from the front.
 
@@ -862,6 +924,8 @@ on that and a lot of arithmetic gets cheap.
     53      000
    ```
    <!-- input: 472 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=spend-every-digit-of-a-random-number-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20050%20%20%20%20INP%2050%20%20cells%2010-25%3A%20the%20seed%0A%2011%20%20%20%20%20%20150%20%20%20%20CLA%2050%20%20cells%2011-17%3A%20the%20next%20random%20number%2C%20s%20%3D%20%2821s%20%2B%2017%29%20mod%201000%0A%2012%20%20%20%20%20%20250%20%20%20%20ADD%2050%0A%2013%20%20%20%20%20%20422%20%20%20%20SFT%2022%0A%2014%20%20%20%20%20%20410%20%20%20%20SFT%2010%0A%2015%20%20%20%20%20%20250%20%20%20%20ADD%2050%0A%2016%20%20%20%20%20%20251%20%20%20%20ADD%2051%0A%2017%20%20%20%20%20%20650%20%20%20%20STO%2050%0A%2018%20%20%20%20%20%20433%20%20%20%20SFT%2033%20%20a%20digit%2C%200-9%3A%20the%20last%20digit%0A%2019%20%20%20%20%20%20652%20%20%20%20STO%2052%0A%2020%20%20%20%20%20%20150%20%20%20%20CLA%2050%0A%2021%20%20%20%20%20%20412%20%20%20%20SFT%2012%20%20a%20number%2C%200-99%3A%20the%20first%20two%20digits%2C%20from%20the%20same%20draw%0A%2022%20%20%20%20%20%20653%20%20%20%20STO%2053%0A%2023%20%20%20%20%20%20552%20%20%20%20OUT%2052%0A%2024%20%20%20%20%20%20553%20%20%20%20OUT%2053%0A%2025%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2050%20%20%20%20%20%20000%0A%2051%20%20%20%20%20%20017%0A%2052%20%20%20%20%20%20000%0A%2053%20%20%20%20%20%20000%0A&in=472)
 
    From the seed 472, drawing twice prints 9 and 26, and drawing once prints 9 and 92. Two draws take 26 cells and
    run 22 instructions; one draw takes 20 cells and runs 16.
@@ -904,6 +968,8 @@ a hack, it's how you get things done.
    ```
    <!-- input: 1 1 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=lay-a-table-out-in-decimal-the-address-is-the-digits-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20046%20%20%20%20INP%2046%20%20cells%2010-21%3A%20the%20entry%20for%20row%20P%2C%20column%20R%20is%20in%20cell%2040%20%2B%203P%20%2B%20R%0A%2011%20%20%20%20%20%20047%20%20%20%20INP%2047%0A%2012%20%20%20%20%20%20146%20%20%20%20CLA%2046%0A%2013%20%20%20%20%20%20246%20%20%20%20ADD%2046%20%203P%3A%20two%20adds%2C%20and%20one%20more%20for%20every%20column%20a%20row%20has%0A%2014%20%20%20%20%20%20246%20%20%20%20ADD%2046%0A%2015%20%20%20%20%20%20247%20%20%20%20ADD%2047%0A%2016%20%20%20%20%20%20249%20%20%20%20ADD%2049%20%20add%20CLA%2040%0A%2017%20%20%20%20%20%20618%20%20%20%20STO%2018%0A%2018%20%20%20%20%20%20100%20%20%20%20CLA%2000%20%20CLA%2040%20%2B%203P%20%2B%20R%2C%20written%20by%20the%20cell%20before%0A%2019%20%20%20%20%20%20648%20%20%20%20STO%2048%0A%2020%20%20%20%20%20%20548%20%20%20%20OUT%2048%0A%2021%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20101%20%20%20%20cells%2040-45%3A%20rows%200%20and%201%2C%20packed%20tight%0A%2041%20%20%20%20%20%20102%0A%2042%20%20%20%20%20%20103%0A%2043%20%20%20%20%20%20201%0A%2044%20%20%20%20%20%20202%0A%2045%20%20%20%20%20%20203%0A%2046%20%20%20%20%20%20000%0A%2047%20%20%20%20%20%20000%0A%2048%20%20%20%20%20%20000%0A%2049%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A&in=1%201)
+
    Instead, start every row ten cells apart, so the entry is at 10P + R. Times 10 is one shift, however wide your
    rows are. And the cells left over between rows aren't wasted: that's where your variables go. Add the CLA
    instruction to the address, run it, and you've done the lookup. The manual's Nim programs keep their tables
@@ -934,6 +1000,8 @@ a hack, it's how you get things done.
     52      203
    ```
    <!-- input: 1 1 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=lay-a-table-out-in-decimal-the-address-is-the-digits-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20043%20%20%20%20INP%2043%20%20cells%2010-20%3A%20the%20entry%20for%20row%20P%2C%20column%20R%20is%20in%20cell%2040%20%2B%2010P%20%2B%20R%0A%2011%20%20%20%20%20%20044%20%20%20%20INP%2044%0A%2012%20%20%20%20%20%20143%20%20%20%20CLA%2043%0A%2013%20%20%20%20%20%20410%20%20%20%20SFT%2010%20%2010P%3A%20one%20shift%2C%20however%20wide%20the%20rows%0A%2014%20%20%20%20%20%20244%20%20%20%20ADD%2044%0A%2015%20%20%20%20%20%20246%20%20%20%20ADD%2046%20%20add%20CLA%2040%0A%2016%20%20%20%20%20%20617%20%20%20%20STO%2017%0A%2017%20%20%20%20%20%20100%20%20%20%20CLA%2000%20%20CLA%2040%20%2B%2010P%20%2B%20R%2C%20written%20by%20the%20cell%20before%0A%2018%20%20%20%20%20%20645%20%20%20%20STO%2045%0A%2019%20%20%20%20%20%20545%20%20%20%20OUT%2045%0A%2020%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20101%20%20%20%20cells%2040-52%3A%20rows%200%20and%201%2C%20ten%20cells%20apart%0A%2041%20%20%20%20%20%20102%0A%2042%20%20%20%20%20%20103%0A%2043%20%20%20%20%20%20000%20%20%20%20cells%2043-49%20between%20the%20rows%20hold%20the%20variables%3A%20P%0A%2044%20%20%20%20%20%20000%20%20%20%20R%0A%2045%20%20%20%20%20%20000%20%20%20%20the%20entry%0A%2046%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2050%20%20%20%20%20%20201%0A%2051%20%20%20%20%20%20202%0A%2052%20%20%20%20%20%20203%0A&in=1%201)
 
    Both look up row 1, column 1 and print 202. The packed table takes 22 cells and runs 12 instructions; the decimal
    one takes 21 cells and runs 11, and the gap grows with every column you add.
@@ -970,6 +1038,8 @@ a hack, it's how you get things done.
    ```
    <!-- input: 5 3 4 -1 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=add-500-to-turn-an-instruction-into-its-partner-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-12%3A%20add%20the%20cards%20with%20alternating%20signs%20until%20a%20negative%20one%0A%2011%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2012%20%20%20%20%20%20326%20%20%20%20TAC%2026%0A%2013%20%20%20%20%20%20142%20%20%20%20CLA%2042%20%20cells%2013-21%3A%20which%20way%20this%20time%3F%20test%20a%20flag%0A%2014%20%20%20%20%20%20319%20%20%20%20TAC%2019%0A%2015%20%20%20%20%20%20141%20%20%20%20CLA%2041%0A%2016%20%20%20%20%20%20240%20%20%20%20ADD%2040%0A%2017%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2018%20%20%20%20%20%20822%20%20%20%20JMP%2022%0A%2019%20%20%20%20%20%20141%20%20%20%20CLA%2041%0A%2020%20%20%20%20%20%20740%20%20%20%20SUB%2040%0A%2021%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2022%20%20%20%20%20%20143%20%20%20%20CLA%2043%20%20cells%2022-27%3A%20swap%20the%20flag%2C%20-1%20-%20sign%0A%2023%20%20%20%20%20%20742%20%20%20%20SUB%2042%0A%2024%20%20%20%20%20%20642%20%20%20%20STO%2042%0A%2025%20%20%20%20%20%20810%20%20%20%20JMP%2010%0A%2026%20%20%20%20%20%20541%20%20%20%20OUT%2041%0A%2027%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20000%0A%2041%20%20%20%20%20%20000%0A%2042%20%20%20%20%20%20000%20%20%20%200%3A%20add%2C%20-1%3A%20subtract%0A%2043%20%20%20%20%20-001%0A&in=5%203%204%20-1)
+
    This one is my favorite. CARDIAC's instructions pair up five apart: INP and OUT, CLA and STO, ADD and SUB, TAC and
    JMP, SFT and HRS. And a cell only keeps three digits, so adding 500 to an instruction turns it into its partner,
    and adding 500 again turns it back. ADD 51 is 251; add 500 and you get 751, which is SUB 51; add 500 again and you
@@ -996,6 +1066,8 @@ a hack, it's how you get things done.
     42      500
    ```
    <!-- input: 5 3 4 -1 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=add-500-to-turn-an-instruction-into-its-partner-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-21%3A%20add%20the%20cards%20with%20alternating%20signs%20until%20a%20negative%20one%0A%2011%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2012%20%20%20%20%20%20320%20%20%20%20TAC%2020%0A%2013%20%20%20%20%20%20141%20%20%20%20CLA%2041%0A%2014%20%20%20%20%20%20240%20%20%20%20ADD%2040%20%20becomes%20SUB%2C%20then%20ADD%20again%0A%2015%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2016%20%20%20%20%20%20114%20%20%20%20CLA%2014%0A%2017%20%20%20%20%20%20242%20%20%20%20ADD%2042%20%20add%20500%20to%20cell%2014%0A%2018%20%20%20%20%20%20614%20%20%20%20STO%2014%0A%2019%20%20%20%20%20%20810%20%20%20%20JMP%2010%0A%2020%20%20%20%20%20%20541%20%20%20%20OUT%2041%0A%2021%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2040%20%20%20%20%20%20000%0A%2041%20%20%20%20%20%20000%0A%2042%20%20%20%20%20%20500%0A&in=5%203%204%20-1)
 
    Both work out 5 - 3 + 4 and print 6. The flag takes 22 cells and runs 43 instructions; adding 500 takes 15 cells
    and runs 35.
@@ -1028,6 +1100,8 @@ a hack, it's how you get things done.
     43      001
    ```
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=sft-22-reads-the-address-out-of-an-instruction-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20130%20%20%20%20CLA%2030%20%20cells%2010-13%3A%20build%20OUT%2040%20%2B%20i%20from%20the%20counter%0A%2011%20%20%20%20%20%20232%20%20%20%20ADD%2032%0A%2012%20%20%20%20%20%20613%20%20%20%20STO%2013%0A%2013%20%20%20%20%20%20500%20%20%20%20OUT%2000%20%20OUT%2040%20%2B%20i%2C%20written%20by%20the%20cell%20before%0A%2014%20%20%20%20%20%20130%20%20%20%20CLA%2030%20%20cells%2014-19%3A%20count%2C%20and%20stop%20at%204%0A%2015%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2016%20%20%20%20%20%20630%20%20%20%20STO%2030%0A%2017%20%20%20%20%20%20731%20%20%20%20SUB%2031%0A%2018%20%20%20%20%20%20310%20%20%20%20TAC%2010%0A%2019%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%20%20%20%20the%20counter%2C%20kept%20in%20step%20with%20the%20instruction%0A%2031%20%20%20%20%20%20004%0A%2032%20%20%20%20%20%20540%20%20%20%20OUT%2040%0A%2040%20%20%20%20%20%20007%0A%2041%20%20%20%20%20%20003%0A%2042%20%20%20%20%20%20009%0A%2043%20%20%20%20%20%20001%0A)
+
    But the instruction already knows where it's pointing, so let it be the pointer. Add 1 to the instruction itself,
    and when you want to know where it's got to, load it and do SFT 22, which drops the opcode and leaves the address.
    OUT 41 is 541; shift 0541 two places left and two right and you've got 0041. There's no counter to keep in step.
@@ -1048,6 +1122,8 @@ a hack, it's how you get things done.
     42      009
     43      001
    ```
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=sft-22-reads-the-address-out-of-an-instruction-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20540%20%20%20%20OUT%2040%20%20cells%2010-17%3A%20print%20cells%2040-43%3B%20cell%2010%20is%20the%20pointer%0A%2011%20%20%20%20%20%20110%20%20%20%20CLA%2010%0A%2012%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2013%20%20%20%20%20%20610%20%20%20%20STO%2010%0A%2014%20%20%20%20%20%20422%20%20%20%20SFT%2022%20%20drop%20the%20opcode%3A%20just%20the%20address%0A%2015%20%20%20%20%20%20730%20%20%20%20SUB%2030%0A%2016%20%20%20%20%20%20310%20%20%20%20TAC%2010%0A%2017%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20044%20%20%20%20one%20past%20the%20end%0A%2040%20%20%20%20%20%20007%0A%2041%20%20%20%20%20%20003%0A%2042%20%20%20%20%20%20009%0A%2043%20%20%20%20%20%20001%0A)
 
    Both print 7, 3, 9 and 1. Keeping a counter takes 17 cells and runs 37 instructions; using the instruction as the
    pointer takes 13 cells and runs 29.
@@ -1079,6 +1155,8 @@ about where things live.
    ```
    <!-- input: 8 8 8 -1 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=cell-00-is-the-constant-1-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-18%3A%20count%20cards%20until%20a%20negative%20one%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20317%20%20%20%20TAC%2017%0A%2013%20%20%20%20%20%20131%20%20%20%20CLA%2031%0A%2014%20%20%20%20%20%20232%20%20%20%20ADD%2032%20%20count%20%2B%201%2C%20from%20a%20cell%20holding%201%0A%2015%20%20%20%20%20%20631%20%20%20%20STO%2031%0A%2016%20%20%20%20%20%20810%20%20%20%20JMP%2010%0A%2017%20%20%20%20%20%20531%20%20%20%20OUT%2031%0A%2018%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%0A%2031%20%20%20%20%20%20000%20%20%20%20the%20count%0A%2032%20%20%20%20%20%20001%0A&in=8%208%208%20-1)
+
    Except one. Cell 00 is wired to hold 001, so there's a 1 sitting there that you never have to supply. ADD 00 and
    SUB 00 add and take away one for free.
 
@@ -1097,6 +1175,8 @@ about where things live.
     31      000    the count
    ```
    <!-- input: 8 8 8 -1 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=cell-00-is-the-constant-1-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-18%3A%20count%20cards%20until%20a%20negative%20one%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20317%20%20%20%20TAC%2017%0A%2013%20%20%20%20%20%20131%20%20%20%20CLA%2031%0A%2014%20%20%20%20%20%20200%20%20%20%20ADD%2000%20%20count%20%2B%201%2C%20from%20cell%2000%0A%2015%20%20%20%20%20%20631%20%20%20%20STO%2031%0A%2016%20%20%20%20%20%20810%20%20%20%20JMP%2010%0A%2017%20%20%20%20%20%20531%20%20%20%20OUT%2031%0A%2018%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%0A%2031%20%20%20%20%20%20000%20%20%20%20the%20count%0A&in=8%208%208%20-1)
 
    Both count three cards. Bringing your own 1 takes 12 cells, and using cell 00 takes 11. They both run 26
    instructions, so the saving here is the cell, which on a hundred-cell machine is worth having.
@@ -1130,6 +1210,8 @@ about where things live.
    ```
    <!-- input: 9 31 28 31 30 31 30 31 31 30 31 30 31 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=load-tables-with-the-program-not-with-inp-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cell%2010%3A%20the%20month%0A%2011%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2011-16%3A%20then%20read%20the%20table%27s%2012%20cards%20into%20cells%2040-51%0A%2012%20%20%20%20%20%20111%20%20%20%20CLA%2011%0A%2013%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2014%20%20%20%20%20%20611%20%20%20%20STO%2011%0A%2015%20%20%20%20%20%20731%20%20%20%20SUB%2031%0A%2016%20%20%20%20%20%20311%20%20%20%20TAC%2011%0A%2017%20%20%20%20%20%20130%20%20%20%20CLA%2030%20%20cells%2017-23%3A%20the%20days%20in%20month%20m%20are%20in%20cell%2039%20%2B%20m%0A%2018%20%20%20%20%20%20232%20%20%20%20ADD%2032%0A%2019%20%20%20%20%20%20620%20%20%20%20STO%2020%0A%2020%20%20%20%20%20%20100%20%20%20%20CLA%2000%20%20CLA%2039%20%2B%20m%2C%20written%20by%20the%20cell%20before%0A%2021%20%20%20%20%20%20633%20%20%20%20STO%2033%0A%2022%20%20%20%20%20%20533%20%20%20%20OUT%2033%0A%2023%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%0A%2031%20%20%20%20%20%20052%20%20%20%20INP%2052%0A%2032%20%20%20%20%20%20139%20%20%20%20CLA%2039%0A%2033%20%20%20%20%20%20000%0A&in=9%2031%2028%2031%2030%2031%2030%2031%2031%2030%2031%2030%2031)
+
    Instead, put the table on the program's own deck. The loader drops each entry into its cell on the way in, so your
    program doesn't need a fill loop at all. Loading isn't free, it costs three instructions a cell, but a fill loop
    pays that and more. One caveat: for a single value, a plain INP is still cheaper.
@@ -1161,6 +1243,8 @@ about where things live.
     51      031
    ```
    <!-- input: 9 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=load-tables-with-the-program-not-with-inp-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-17%3A%20the%20days%20in%20month%20m%20are%20in%20cell%2039%20%2B%20m%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20231%20%20%20%20ADD%2031%0A%2013%20%20%20%20%20%20614%20%20%20%20STO%2014%0A%2014%20%20%20%20%20%20100%20%20%20%20CLA%2000%20%20CLA%2039%20%2B%20m%2C%20written%20by%20the%20cell%20before%0A%2015%20%20%20%20%20%20632%20%20%20%20STO%2032%0A%2016%20%20%20%20%20%20532%20%20%20%20OUT%2032%0A%2017%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%0A%2031%20%20%20%20%20%20139%20%20%20%20CLA%2039%0A%2032%20%20%20%20%20%20000%0A%2040%20%20%20%20%20%20031%20%20%20%20cells%2040-51%3A%20the%20table%2C%20on%20the%20program%27s%20own%20deck%0A%2041%20%20%20%20%20%20028%0A%2042%20%20%20%20%20%20031%0A%2043%20%20%20%20%20%20030%0A%2044%20%20%20%20%20%20031%0A%2045%20%20%20%20%20%20030%0A%2046%20%20%20%20%20%20031%0A%2047%20%20%20%20%20%20031%0A%2048%20%20%20%20%20%20030%0A%2049%20%20%20%20%20%20031%0A%2050%20%20%20%20%20%20030%0A%2051%20%20%20%20%20%20031%0A&in=9)
 
    Both print 30 for September. Counting the loading, reading the table in takes 18 cells and runs 140 instructions,
    and loading it with the program takes 23 cells and runs 83.
@@ -1197,6 +1281,8 @@ about where things live.
    ```
    <!-- input: 2 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=stream-the-table-dont-store-it-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-17%3A%20entry%20k%20of%20the%20table%20is%20in%20cell%2039%20%2B%20k%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20231%20%20%20%20ADD%2031%0A%2013%20%20%20%20%20%20614%20%20%20%20STO%2014%0A%2014%20%20%20%20%20%20100%20%20%20%20CLA%2000%20%20CLA%2039%20%2B%20k%2C%20written%20by%20the%20cell%20before%0A%2015%20%20%20%20%20%20632%20%20%20%20STO%2032%0A%2016%20%20%20%20%20%20532%20%20%20%20OUT%2032%0A%2017%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%0A%2031%20%20%20%20%20%20139%20%20%20%20CLA%2039%0A%2032%20%20%20%20%20%20000%0A%2040%20%20%20%20%20%20031%20%20%20%20cells%2040-51%3A%20the%20whole%20table%2C%20in%20memory%0A%2041%20%20%20%20%20%20028%0A%2042%20%20%20%20%20%20031%0A%2043%20%20%20%20%20%20030%0A%2044%20%20%20%20%20%20031%0A%2045%20%20%20%20%20%20030%0A%2046%20%20%20%20%20%20031%0A%2047%20%20%20%20%20%20031%0A%2048%20%20%20%20%20%20030%0A%2049%20%20%20%20%20%20031%0A%2050%20%20%20%20%20%20030%0A%2051%20%20%20%20%20%20031%0A&in=2)
+
    But if you only need one entry, why keep all twelve? Read the table as input cards, one at a time, and hold on to
    just the entry you want. The table takes no memory at all, only the time to read it. It works whenever you need a
    handful of entries. It won't work for a sort, which needs every entry at once.
@@ -1217,6 +1303,8 @@ about where things live.
     31      000    the one card kept
    ```
    <!-- input: 2 31 28 31 30 31 30 31 31 30 31 30 31 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=stream-the-table-dont-store-it-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-19%3A%20read%20the%20table%27s%20cards%20one%20by%20one%20and%20keep%20only%20entry%20k%0A%2011%20%20%20%20%20%20031%20%20%20%20INP%2031%0A%2012%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2013%20%20%20%20%20%20700%20%20%20%20SUB%2000%0A%2014%20%20%20%20%20%20630%20%20%20%20STO%2030%0A%2015%20%20%20%20%20%20700%20%20%20%20SUB%2000%0A%2016%20%20%20%20%20%20318%20%20%20%20TAC%2018%0A%2017%20%20%20%20%20%20811%20%20%20%20JMP%2011%0A%2018%20%20%20%20%20%20531%20%20%20%20OUT%2031%0A%2019%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%0A%2031%20%20%20%20%20%20000%20%20%20%20the%20one%20card%20kept%0A&in=2%2031%2028%2031%2030%2031%2030%2031%2031%2030%2031%2030%2031)
 
    Both print 28 for entry 2. Keeping the table takes 23 cells and runs 8 instructions; streaming it takes 12 cells
    and runs 16, plus the time to read the cards.
@@ -1243,6 +1331,8 @@ about where things live.
    ```
    <!-- input: 21 -->
 
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=when-it-doesnt-fit-split-it-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-18%3A%20both%20parts%20in%20one%20deck%3A%20all%20of%20it%20in%20memory%20at%20once%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20230%20%20%20%20ADD%2030%0A%2013%20%20%20%20%20%20631%20%20%20%20STO%2031%0A%2014%20%20%20%20%20%20131%20%20%20%20CLA%2031%0A%2015%20%20%20%20%20%20231%20%20%20%20ADD%2031%0A%2016%20%20%20%20%20%20632%20%20%20%20STO%2032%0A%2017%20%20%20%20%20%20532%20%20%20%20OUT%2032%0A%2018%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%0A%2031%20%20%20%20%20%20000%0A%2032%20%20%20%20%20%20000%0A&in=21)
+
    When that doesn't fit, split it into two tapes. The first ends with HRS 02, the operator loads tape 2 and starts
    at 00, and the loader lays tape 2's code over tape 1's. Here's the nice part: every cell tape 2 doesn't load keeps
    its value, so tape 1's answer is still sitting there waiting. Only the bigger tape has to fit, and the room the
@@ -1268,5 +1358,7 @@ about where things live.
     32      000
    ```
    <!-- input: 21 -->
+
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=when-it-doesnt-fit-split-it-2&cqb=002%0A800%0A010%0A030%0A011%0A130%0A012%0A230%0A013%0A631%0A014%0A902%0A030%0A000%0A031%0A000%0A002%0A810%0A&cqb=002%0A800%0A010%0A131%0A011%0A231%0A012%0A632%0A013%0A532%0A014%0A900%0A032%0A000%0A002%0A810%0A&in=21)
 
    Both print 84 for 21. In one deck the program needs 12 cells at once; split, the bigger tape needs 7.
