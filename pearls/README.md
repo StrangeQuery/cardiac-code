@@ -1622,7 +1622,7 @@ a hack, it's how you get things done.
    the case value, after a range check that sends anything outside the cases to the default, which is the caution
    above. When the cases are spread out, they use a tree of comparisons instead, much like the first version.
 
-## Subroutines: JMP leaves the way back
+## Subroutines: JMP leaves the return address
 
 CARDIAC has no call and no return. What it has is JMP, which writes a jump back to the cell after it into cell 99
 before it jumps, and that turns out to be all a subroutine needs.
@@ -1631,9 +1631,9 @@ before it jumps, and that turns out to be all a subroutine needs.
    in your program.
 
    CARDIAC has no call instruction, but JMP does half the work. It writes 8 and the address of the cell after it into
-   cell 99, so JMP 20 in cell 11 leaves 812 there, which is JMP 12, the way back. The trouble is keeping it, because
-   the next JMP overwrites cell 99, and you can't simply JMP 99 to return, because that JMP would write its own way
-   back into cell 99 before it got there.
+   cell 99, so JMP 20 in cell 11 leaves 812 there, which is JMP 12, the return address. The trouble is keeping it,
+   because the next JMP overwrites cell 99, and you can't simply JMP 99 to return, because that JMP would write its
+   own return address into cell 99 before it got there.
 
    ARM and MIPS still call this way. ARM's BL leaves the return address in a register called the link register, LR,
    and MIPS's jal leaves it in $ra, with no stack involved. A leaf function, one that calls nothing else, returns
@@ -1642,15 +1642,15 @@ before it jumps, and that turns out to be all a subroutine needs.
 
    #### The stack is expensive
 
-   Ask most programmers where a way back belongs, and they'll say on a stack. So the routine pushes cell 99 as soon
-   as it starts, and pops it into its last cell just before it runs into it. The stack is Brian L. Stuart's, from his
-   [CARDIAC page](https://www.cs.drexel.edu/~bls96/museum/cardiac.html): he keeps the top of the stack as an address,
-   and adds it to STO 00 to push or to CLA 00 to pop. Here cell 50 keeps the STO itself, so a push only has to copy
-   it and add 1, and subtracting 500 turns it into the CLA that reads the top back.
+   Ask most programmers where a return address belongs, and they'll say on a stack. So the routine pushes cell 99 as
+   soon as it starts, and pops it into its last cell just before it runs into it. The stack is Brian L. Stuart's,
+   from his [CARDIAC page](https://www.cs.drexel.edu/~bls96/museum/cardiac.html): he keeps the top of the stack as an
+   address, and adds it to STO 00 to push or to CLA 00 to pop. Here cell 50 keeps the STO itself, so a push only has
+   to copy it and add 1, and subtracting 500 turns it into the CLA that reads the top back.
 
    ```
    cell  contents  notes
-    10      040    INP 40  cells 10-14: two calls; each JMP leaves its way back in cell 99
+    10      040    INP 40  cells 10-14: two calls; each JMP leaves its return address in cell 99
     11      820    JMP 20
     12      040    INP 40
     13      820    JMP 20
@@ -1665,14 +1665,14 @@ before it jumps, and that turns out to be all a subroutine needs.
     27      240    ADD 40
     28      641    STO 41
     29      541    OUT 41
-    30      150    CLA 50  cells 30-37: pop the way back into cell 37 and run it; CLA is STO minus 500
+    30      150    CLA 50  cells 30-37: pop the return address into cell 37 and run it; CLA is STO minus 500
     31      700    SUB 00
     32      650    STO 50
     33      751    SUB 51
     34      635    STO 35
-    35      100    CLA 00  the way back, read from the stack
+    35      100    CLA 00  the return address, read from the stack
     36      637    STO 37
-    37      000    the way back, popped into place
+    37      000    the return address, popped into place
     40      000    x
     41      000
     50      652    STO 52
@@ -1681,27 +1681,27 @@ before it jumps, and that turns out to be all a subroutine needs.
    ```
    <!-- input: 3 4 -->
 
-   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=subroutines-and-recursion-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-14%3A%20two%20calls%3B%20each%20JMP%20leaves%20its%20way%20back%20in%20cell%2099%0A%2011%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2012%20%20%20%20%20%20040%20%20%20%20INP%2040%0A%2013%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2014%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2020%20%20%20%20%20%20150%20%20%20%20CLA%2050%20%20cells%2020-25%3A%20push%20cell%2099%3B%20cell%2050%20is%20the%20STO%20to%20the%20stack%27s%20top%0A%2021%20%20%20%20%20%20625%20%20%20%20STO%2025%0A%2022%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2023%20%20%20%20%20%20650%20%20%20%20STO%2050%0A%2024%20%20%20%20%20%20199%20%20%20%20CLA%2099%0A%2025%20%20%20%20%20%20600%20%20%20%20STO%2000%20%20STO%20to%20the%20top%2C%20written%20by%20cell%2021%0A%2026%20%20%20%20%20%20140%20%20%20%20CLA%2040%20%20cells%2026-29%3A%20double%20x%20and%20print%20it%0A%2027%20%20%20%20%20%20240%20%20%20%20ADD%2040%0A%2028%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2029%20%20%20%20%20%20541%20%20%20%20OUT%2041%0A%2030%20%20%20%20%20%20150%20%20%20%20CLA%2050%20%20cells%2030-37%3A%20pop%20the%20way%20back%20into%20cell%2037%20and%20run%20it%3B%20CLA%20is%20STO%20minus%20500%0A%2031%20%20%20%20%20%20700%20%20%20%20SUB%2000%0A%2032%20%20%20%20%20%20650%20%20%20%20STO%2050%0A%2033%20%20%20%20%20%20751%20%20%20%20SUB%2051%0A%2034%20%20%20%20%20%20635%20%20%20%20STO%2035%0A%2035%20%20%20%20%20%20100%20%20%20%20CLA%2000%20%20the%20way%20back%2C%20read%20from%20the%20stack%0A%2036%20%20%20%20%20%20637%20%20%20%20STO%2037%0A%2037%20%20%20%20%20%20000%20%20%20%20the%20way%20back%2C%20popped%20into%20place%0A%2040%20%20%20%20%20%20000%20%20%20%20x%0A%2041%20%20%20%20%20%20000%0A%2050%20%20%20%20%20%20652%20%20%20%20STO%2052%0A%2051%20%20%20%20%20%20500%0A%2052%20%20%20%20%20%20000%20%20%20%20the%20stack%0A&in=3%204)
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=subroutines-and-recursion-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-14%3A%20two%20calls%3B%20each%20JMP%20leaves%20its%20return%20address%20in%20cell%2099%0A%2011%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2012%20%20%20%20%20%20040%20%20%20%20INP%2040%0A%2013%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2014%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2020%20%20%20%20%20%20150%20%20%20%20CLA%2050%20%20cells%2020-25%3A%20push%20cell%2099%3B%20cell%2050%20is%20the%20STO%20to%20the%20stack%27s%20top%0A%2021%20%20%20%20%20%20625%20%20%20%20STO%2025%0A%2022%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2023%20%20%20%20%20%20650%20%20%20%20STO%2050%0A%2024%20%20%20%20%20%20199%20%20%20%20CLA%2099%0A%2025%20%20%20%20%20%20600%20%20%20%20STO%2000%20%20STO%20to%20the%20top%2C%20written%20by%20cell%2021%0A%2026%20%20%20%20%20%20140%20%20%20%20CLA%2040%20%20cells%2026-29%3A%20double%20x%20and%20print%20it%0A%2027%20%20%20%20%20%20240%20%20%20%20ADD%2040%0A%2028%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2029%20%20%20%20%20%20541%20%20%20%20OUT%2041%0A%2030%20%20%20%20%20%20150%20%20%20%20CLA%2050%20%20cells%2030-37%3A%20pop%20the%20return%20address%20into%20cell%2037%20and%20run%20it%3B%20CLA%20is%20STO%20minus%20500%0A%2031%20%20%20%20%20%20700%20%20%20%20SUB%2000%0A%2032%20%20%20%20%20%20650%20%20%20%20STO%2050%0A%2033%20%20%20%20%20%20751%20%20%20%20SUB%2051%0A%2034%20%20%20%20%20%20635%20%20%20%20STO%2035%0A%2035%20%20%20%20%20%20100%20%20%20%20CLA%2000%20%20the%20return%20address%2C%20read%20from%20the%20stack%0A%2036%20%20%20%20%20%20637%20%20%20%20STO%2037%0A%2037%20%20%20%20%20%20000%20%20%20%20the%20return%20address%2C%20popped%20into%20place%0A%2040%20%20%20%20%20%20000%20%20%20%20x%0A%2041%20%20%20%20%20%20000%0A%2050%20%20%20%20%20%20652%20%20%20%20STO%2052%0A%2051%20%20%20%20%20%20500%0A%2052%20%20%20%20%20%20000%20%20%20%20the%20stack%0A&in=3%204)
 
    It works, but look at the price on a machine with a hundred cells. Pushing runs 6 instructions and popping 7, so
    every call costs 13 instructions before the routine does anything. The routine spends 14 cells on pushing, popping
-   and its way back, and the pointer, the 500 and the stack take 3 more, one stack cell for every call that can be
-   under way at once.
+   and its return address, and the pointer, the 500 and the stack take 3 more, one stack cell for every call that can
+   be under way at once.
 
    #### A more economical way
 
-   A routine that never calls itself only ever has one way back to keep, and it doesn't need a stack for that. The
-   stackless way is to copy cell 99 into the routine's own last cell as soon as it starts, and let the routine run
-   into it at the end. The copy comes first because any JMP inside the routine, in a loop or a call to another
+   A routine that never calls itself only ever has one return address to keep, and it doesn't need a stack for that.
+   The stackless way is to copy cell 99 into the routine's own last cell as soon as it starts, and let the routine
+   run into it at the end. The copy comes first because any JMP inside the routine, in a loop or a call to another
    routine, overwrites cell 99, and by then the copy is safe. Routines can call each other this way, since each one
-   keeps its own way back in its own cell. It still costs something: three cells in every routine, two for CLA 99 and
-   STO and one to hold the way back, and two instructions every call. If the routine's argument arrives in the
-   accumulator, it has to be stored before CLA 99, which can cost one more. Brian Stuart's page builds its routines
-   this way too, before it gets to the stack.
+   keeps its own return address in its own cell. It still costs something: three cells in every routine, two for CLA
+   99 and STO and one to hold the return address, and two instructions every call. If the routine's argument arrives
+   in the accumulator, it has to be stored before CLA 99, which can cost one more. Brian Stuart's page builds its
+   routines this way too, before it gets to the stack.
 
    ```
    cell  contents  notes
-    10      040    INP 40  cells 10-14: two calls; each JMP leaves its way back in cell 99
+    10      040    INP 40  cells 10-14: two calls; each JMP leaves its return address in cell 99
     11      820    JMP 20
     12      040    INP 40
     13      820    JMP 20
@@ -1712,27 +1712,27 @@ before it jumps, and that turns out to be all a subroutine needs.
     23      240    ADD 40
     24      641    STO 41
     25      541    OUT 41
-    26      000    the way back, copied from cell 99
+    26      000    the return address, copied from cell 99
     40      000    x
     41      000
    ```
    <!-- input: 3 4 -->
 
-   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=subroutines-and-recursion-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-14%3A%20two%20calls%3B%20each%20JMP%20leaves%20its%20way%20back%20in%20cell%2099%0A%2011%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2012%20%20%20%20%20%20040%20%20%20%20INP%2040%0A%2013%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2014%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2020%20%20%20%20%20%20199%20%20%20%20CLA%2099%20%20cells%2020-26%3A%20copy%20cell%2099%20into%20the%20routine%27s%20last%20cell%2C%20then%20double%20x%20and%20print%20it%0A%2021%20%20%20%20%20%20626%20%20%20%20STO%2026%0A%2022%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2023%20%20%20%20%20%20240%20%20%20%20ADD%2040%0A%2024%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2025%20%20%20%20%20%20541%20%20%20%20OUT%2041%0A%2026%20%20%20%20%20%20000%20%20%20%20the%20way%20back%2C%20copied%20from%20cell%2099%0A%2040%20%20%20%20%20%20000%20%20%20%20x%0A%2041%20%20%20%20%20%20000%0A&in=3%204)
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=subroutines-and-recursion-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-14%3A%20two%20calls%3B%20each%20JMP%20leaves%20its%20return%20address%20in%20cell%2099%0A%2011%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2012%20%20%20%20%20%20040%20%20%20%20INP%2040%0A%2013%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2014%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2020%20%20%20%20%20%20199%20%20%20%20CLA%2099%20%20cells%2020-26%3A%20copy%20cell%2099%20into%20the%20routine%27s%20last%20cell%2C%20then%20double%20x%20and%20print%20it%0A%2021%20%20%20%20%20%20626%20%20%20%20STO%2026%0A%2022%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2023%20%20%20%20%20%20240%20%20%20%20ADD%2040%0A%2024%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2025%20%20%20%20%20%20541%20%20%20%20OUT%2041%0A%2026%20%20%20%20%20%20000%20%20%20%20the%20return%20address%2C%20copied%20from%20cell%2099%0A%2040%20%20%20%20%20%20000%20%20%20%20x%0A%2041%20%20%20%20%20%20000%0A&in=3%204)
 
    <!-- maps -->
 
    Both print 6 and 8. The stack takes 28 cells and runs 41 instructions; stackless takes 14 cells and runs 19.
    That's 17 cells of linkage against 3, and 13 instructions a call against 2.
 
-   The PDP-8 built the stackless way into its call instruction. JMS stores the way back in the first word of the
-   routine and starts it at the second, and the routine returns with an indirect jump through that word, so its
+   The PDP-8 built the stackless way into its call instruction. JMS stores the return address in the first word of
+   the routine and starts it at the second, and the routine returns with an indirect jump through that word, so its
    routines couldn't call themselves without help either.
 
    What stackless gives up is recursion. A routine that calls itself overwrites its own copy, and the outer call
-   loses its way back, and two routines that call each other do the same to each other. The exception is a call
+   loses its return address, and two routines that call each other do the same to each other. The exception is a call
    that's the last thing the routine does. There's nothing left to come back for, so the call can be a jump back to
-   the routine's start, and the way back it copied first is still in its cell. Compilers call this tail-call
+   the routine's start, and the return address it copied first is still in its cell. Compilers call this tail-call
    elimination, and Scheme's standard requires it, so a loop can be written as a function that calls itself last
    without ever running out of stack.
 
@@ -1769,19 +1769,19 @@ before it jumps, and that turns out to be all a subroutine needs.
     17      820    JMP 20
     18      541    OUT 41
     19      900    HRS 00
-    20      199    CLA 99  cells 20-26: copy the way back first, then add the reading unless it is negative
+    20      199    CLA 99  cells 20-26: copy the return address first, then add the reading unless it is negative
     21      626    STO 26
     22      140    CLA 40
     23      326    TAC 26  negative: skip it and go back
     24      241    ADD 41
     25      641    STO 41
-    26      000    the way back, copied from cell 99
+    26      000    the return address, copied from cell 99
     40      000    the reading
     41      000    the total
    ```
    <!-- input: 5 -1 7 -3 -->
 
-   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=return-with-tac-99-when-the-accumulator-is-negative-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-18%3A%20four%20readings%2C%20each%20handed%20to%20the%20routine%3B%20then%20print%20the%20total%0A%2011%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2012%20%20%20%20%20%20040%20%20%20%20INP%2040%0A%2013%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2014%20%20%20%20%20%20040%20%20%20%20INP%2040%0A%2015%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2016%20%20%20%20%20%20040%20%20%20%20INP%2040%0A%2017%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2018%20%20%20%20%20%20541%20%20%20%20OUT%2041%0A%2019%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2020%20%20%20%20%20%20199%20%20%20%20CLA%2099%20%20cells%2020-26%3A%20copy%20the%20way%20back%20first%2C%20then%20add%20the%20reading%20unless%20it%20is%20negative%0A%2021%20%20%20%20%20%20626%20%20%20%20STO%2026%0A%2022%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2023%20%20%20%20%20%20326%20%20%20%20TAC%2026%20%20negative%3A%20skip%20it%20and%20go%20back%0A%2024%20%20%20%20%20%20241%20%20%20%20ADD%2041%0A%2025%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2026%20%20%20%20%20%20000%20%20%20%20the%20way%20back%2C%20copied%20from%20cell%2099%0A%2040%20%20%20%20%20%20000%20%20%20%20the%20reading%0A%2041%20%20%20%20%20%20000%20%20%20%20the%20total%0A&in=5%20-1%207%20-3)
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=return-with-tac-99-when-the-accumulator-is-negative-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-18%3A%20four%20readings%2C%20each%20handed%20to%20the%20routine%3B%20then%20print%20the%20total%0A%2011%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2012%20%20%20%20%20%20040%20%20%20%20INP%2040%0A%2013%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2014%20%20%20%20%20%20040%20%20%20%20INP%2040%0A%2015%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2016%20%20%20%20%20%20040%20%20%20%20INP%2040%0A%2017%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2018%20%20%20%20%20%20541%20%20%20%20OUT%2041%0A%2019%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2020%20%20%20%20%20%20199%20%20%20%20CLA%2099%20%20cells%2020-26%3A%20copy%20the%20return%20address%20first%2C%20then%20add%20the%20reading%20unless%20it%20is%20negative%0A%2021%20%20%20%20%20%20626%20%20%20%20STO%2026%0A%2022%20%20%20%20%20%20140%20%20%20%20CLA%2040%0A%2023%20%20%20%20%20%20326%20%20%20%20TAC%2026%20%20negative%3A%20skip%20it%20and%20go%20back%0A%2024%20%20%20%20%20%20241%20%20%20%20ADD%2041%0A%2025%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2026%20%20%20%20%20%20000%20%20%20%20the%20return%20address%2C%20copied%20from%20cell%2099%0A%2040%20%20%20%20%20%20000%20%20%20%20the%20reading%0A%2041%20%20%20%20%20%20000%20%20%20%20the%20total%0A&in=5%20-1%207%20-3)
 
    TAC doesn't write cell 99; only JMP does. So when the accumulator is negative, TAC 99 goes straight back to the
    caller, and here the accumulator is negative exactly when the reading should be skipped. The test that skips it is
@@ -1801,22 +1801,22 @@ before it jumps, and that turns out to be all a subroutine needs.
     19      900    HRS 00
     20      140    CLA 40  cells 20-21: a negative reading returns at once; TAC leaves cell 99 alone
     21      399    TAC 99
-    22      241    ADD 41  cells 22-26: otherwise add it, and only now copy the way back
+    22      241    ADD 41  cells 22-26: otherwise add it, and only now copy the return address
     23      641    STO 41
     24      199    CLA 99
     25      626    STO 26
-    26      000    the way back, copied from cell 99
+    26      000    the return address, copied from cell 99
     40      000    the reading
     41      000    the total
    ```
    <!-- input: 5 -1 7 -3 -->
 
-   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=return-with-tac-99-when-the-accumulator-is-negative-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-18%3A%20four%20readings%2C%20each%20handed%20to%20the%20routine%3B%20then%20print%20the%20total%0A%2011%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2012%20%20%20%20%20%20040%20%20%20%20INP%2040%0A%2013%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2014%20%20%20%20%20%20040%20%20%20%20INP%2040%0A%2015%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2016%20%20%20%20%20%20040%20%20%20%20INP%2040%0A%2017%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2018%20%20%20%20%20%20541%20%20%20%20OUT%2041%0A%2019%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2020%20%20%20%20%20%20140%20%20%20%20CLA%2040%20%20cells%2020-21%3A%20a%20negative%20reading%20returns%20at%20once%3B%20TAC%20leaves%20cell%2099%20alone%0A%2021%20%20%20%20%20%20399%20%20%20%20TAC%2099%0A%2022%20%20%20%20%20%20241%20%20%20%20ADD%2041%20%20cells%2022-26%3A%20otherwise%20add%20it%2C%20and%20only%20now%20copy%20the%20way%20back%0A%2023%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2024%20%20%20%20%20%20199%20%20%20%20CLA%2099%0A%2025%20%20%20%20%20%20626%20%20%20%20STO%2026%0A%2026%20%20%20%20%20%20000%20%20%20%20the%20way%20back%2C%20copied%20from%20cell%2099%0A%2040%20%20%20%20%20%20000%20%20%20%20the%20reading%0A%2041%20%20%20%20%20%20000%20%20%20%20the%20total%0A&in=5%20-1%207%20-3)
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=return-with-tac-99-when-the-accumulator-is-negative-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20040%20%20%20%20INP%2040%20%20cells%2010-18%3A%20four%20readings%2C%20each%20handed%20to%20the%20routine%3B%20then%20print%20the%20total%0A%2011%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2012%20%20%20%20%20%20040%20%20%20%20INP%2040%0A%2013%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2014%20%20%20%20%20%20040%20%20%20%20INP%2040%0A%2015%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2016%20%20%20%20%20%20040%20%20%20%20INP%2040%0A%2017%20%20%20%20%20%20820%20%20%20%20JMP%2020%0A%2018%20%20%20%20%20%20541%20%20%20%20OUT%2041%0A%2019%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2020%20%20%20%20%20%20140%20%20%20%20CLA%2040%20%20cells%2020-21%3A%20a%20negative%20reading%20returns%20at%20once%3B%20TAC%20leaves%20cell%2099%20alone%0A%2021%20%20%20%20%20%20399%20%20%20%20TAC%2099%0A%2022%20%20%20%20%20%20241%20%20%20%20ADD%2041%20%20cells%2022-26%3A%20otherwise%20add%20it%2C%20and%20only%20now%20copy%20the%20return%20address%0A%2023%20%20%20%20%20%20641%20%20%20%20STO%2041%0A%2024%20%20%20%20%20%20199%20%20%20%20CLA%2099%0A%2025%20%20%20%20%20%20626%20%20%20%20STO%2026%0A%2026%20%20%20%20%20%20000%20%20%20%20the%20return%20address%2C%20copied%20from%20cell%2099%0A%2040%20%20%20%20%20%20000%20%20%20%20the%20reading%0A%2041%20%20%20%20%20%20000%20%20%20%20the%20total%0A&in=5%20-1%207%20-3)
 
    Both add up 5 and 7 and print 12, and both take 19 cells. Copying first runs 34 instructions, and returning with
    TAC runs 30, two fewer for every reading skipped. A routine that ends negative on every path never has to copy
-   cell 99 at all, which is why some programs go as far as storing their data as negative numbers. Cell 99 as the way
-   back is the subroutine technique Brian L. Stuart's
+   cell 99 at all, which is why some programs go as far as storing their data as negative numbers. Cell 99 as the
+   return address is the subroutine technique Brian L. Stuart's
    [CARDIAC page](https://www.cs.drexel.edu/~bls96/museum/cardiac.html) shows, and TAC 99 is a small variation on it.
 
    The Intel 8080 has this as one instruction. RM, return if minus, returns when the sign flag is set and otherwise
@@ -1850,16 +1850,16 @@ before it jumps, and that turns out to be all a subroutine needs.
     41      644    STO 44
     42      131    CLA 31
     43      231    ADD 31
-    44      000    the way back
+    44      000    the return address
     45      199    CLA 99  cells 45-49: ten times the card
     46      649    STO 49
     47      131    CLA 31
     48      410    SFT 10
-    49      000    the way back
+    49      000    the return address
    ```
    <!-- input: 0 3 5 -1 -->
 
-   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=call-a-routine-through-its-address-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cell%2010%3A%20which%20function%3A%200%20for%20double%2C%20-1%20for%20times%20ten%0A%2011%20%20%20%20%20%20031%20%20%20%20INP%2031%20%20cells%2011-13%3A%20each%20card%20until%20a%20negative%20one%0A%2012%20%20%20%20%20%20131%20%20%20%20CLA%2031%0A%2013%20%20%20%20%20%20322%20%20%20%20TAC%2022%0A%2014%20%20%20%20%20%20130%20%20%20%20CLA%2030%20%20cells%2014-18%3A%20test%20the%20choice%2C%20then%20call%20one%20function%20or%20the%20other%0A%2015%20%20%20%20%20%20318%20%20%20%20TAC%2018%0A%2016%20%20%20%20%20%20840%20%20%20%20JMP%2040%0A%2017%20%20%20%20%20%20819%20%20%20%20JMP%2019%0A%2018%20%20%20%20%20%20845%20%20%20%20JMP%2045%0A%2019%20%20%20%20%20%20632%20%20%20%20STO%2032%20%20cells%2019-22%3A%20print%20what%20came%20back%0A%2020%20%20%20%20%20%20532%20%20%20%20OUT%2032%0A%2021%20%20%20%20%20%20811%20%20%20%20JMP%2011%0A%2022%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%20%20%20%20the%20choice%0A%2031%20%20%20%20%20%20000%20%20%20%20the%20card%0A%2032%20%20%20%20%20%20000%0A%2040%20%20%20%20%20%20199%20%20%20%20CLA%2099%20%20cells%2040-44%3A%20double%20the%20card%0A%2041%20%20%20%20%20%20644%20%20%20%20STO%2044%0A%2042%20%20%20%20%20%20131%20%20%20%20CLA%2031%0A%2043%20%20%20%20%20%20231%20%20%20%20ADD%2031%0A%2044%20%20%20%20%20%20000%20%20%20%20the%20way%20back%0A%2045%20%20%20%20%20%20199%20%20%20%20CLA%2099%20%20cells%2045-49%3A%20ten%20times%20the%20card%0A%2046%20%20%20%20%20%20649%20%20%20%20STO%2049%0A%2047%20%20%20%20%20%20131%20%20%20%20CLA%2031%0A%2048%20%20%20%20%20%20410%20%20%20%20SFT%2010%0A%2049%20%20%20%20%20%20000%20%20%20%20the%20way%20back%0A&in=0%203%205%20-1)
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=call-a-routine-through-its-address-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cell%2010%3A%20which%20function%3A%200%20for%20double%2C%20-1%20for%20times%20ten%0A%2011%20%20%20%20%20%20031%20%20%20%20INP%2031%20%20cells%2011-13%3A%20each%20card%20until%20a%20negative%20one%0A%2012%20%20%20%20%20%20131%20%20%20%20CLA%2031%0A%2013%20%20%20%20%20%20322%20%20%20%20TAC%2022%0A%2014%20%20%20%20%20%20130%20%20%20%20CLA%2030%20%20cells%2014-18%3A%20test%20the%20choice%2C%20then%20call%20one%20function%20or%20the%20other%0A%2015%20%20%20%20%20%20318%20%20%20%20TAC%2018%0A%2016%20%20%20%20%20%20840%20%20%20%20JMP%2040%0A%2017%20%20%20%20%20%20819%20%20%20%20JMP%2019%0A%2018%20%20%20%20%20%20845%20%20%20%20JMP%2045%0A%2019%20%20%20%20%20%20632%20%20%20%20STO%2032%20%20cells%2019-22%3A%20print%20what%20came%20back%0A%2020%20%20%20%20%20%20532%20%20%20%20OUT%2032%0A%2021%20%20%20%20%20%20811%20%20%20%20JMP%2011%0A%2022%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%20%20%20%20the%20choice%0A%2031%20%20%20%20%20%20000%20%20%20%20the%20card%0A%2032%20%20%20%20%20%20000%0A%2040%20%20%20%20%20%20199%20%20%20%20CLA%2099%20%20cells%2040-44%3A%20double%20the%20card%0A%2041%20%20%20%20%20%20644%20%20%20%20STO%2044%0A%2042%20%20%20%20%20%20131%20%20%20%20CLA%2031%0A%2043%20%20%20%20%20%20231%20%20%20%20ADD%2031%0A%2044%20%20%20%20%20%20000%20%20%20%20the%20return%20address%0A%2045%20%20%20%20%20%20199%20%20%20%20CLA%2099%20%20cells%2045-49%3A%20ten%20times%20the%20card%0A%2046%20%20%20%20%20%20649%20%20%20%20STO%2049%0A%2047%20%20%20%20%20%20131%20%20%20%20CLA%2031%0A%2048%20%20%20%20%20%20410%20%20%20%20SFT%2010%0A%2049%20%20%20%20%20%20000%20%20%20%20the%20return%20address%0A&in=0%203%205%20-1)
 
    On CARDIAC a routine is just the address of its first cell, so pass the address itself. JMP 00 is 800, and adding
    the address to it makes the call, JMP 40 or JMP 45. Store it once, before the loop, and every card after that goes
@@ -1888,16 +1888,16 @@ before it jumps, and that turns out to be all a subroutine needs.
     41      644    STO 44
     42      131    CLA 31
     43      231    ADD 31
-    44      000    the way back
+    44      000    the return address
     45      199    CLA 99  cells 45-49: ten times the card
     46      649    STO 49
     47      131    CLA 31
     48      410    SFT 10
-    49      000    the way back
+    49      000    the return address
    ```
    <!-- input: 40 3 5 -1 -->
 
-   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=call-a-routine-through-its-address-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-13%3A%20the%20function%20is%20its%20address%3B%20JMP%2000%20plus%20the%20address%20is%20the%20call%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20233%20%20%20%20ADD%2033%0A%2013%20%20%20%20%20%20617%20%20%20%20STO%2017%0A%2014%20%20%20%20%20%20031%20%20%20%20INP%2031%20%20cells%2014-21%3A%20each%20card%20until%20a%20negative%20one%3A%20call%20the%20function%2C%20print%20what%20came%20back%0A%2015%20%20%20%20%20%20131%20%20%20%20CLA%2031%0A%2016%20%20%20%20%20%20321%20%20%20%20TAC%2021%0A%2017%20%20%20%20%20%20800%20%20%20%20JMP%2000%20%20JMP%20f%2C%20written%20by%20cell%2013%0A%2018%20%20%20%20%20%20632%20%20%20%20STO%2032%0A%2019%20%20%20%20%20%20532%20%20%20%20OUT%2032%0A%2020%20%20%20%20%20%20814%20%20%20%20JMP%2014%0A%2021%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%20%20%20%20the%20function%27s%20address%0A%2031%20%20%20%20%20%20000%20%20%20%20the%20card%0A%2032%20%20%20%20%20%20000%0A%2033%20%20%20%20%20%20800%20%20%20%20JMP%2000%0A%2040%20%20%20%20%20%20199%20%20%20%20CLA%2099%20%20cells%2040-44%3A%20double%20the%20card%0A%2041%20%20%20%20%20%20644%20%20%20%20STO%2044%0A%2042%20%20%20%20%20%20131%20%20%20%20CLA%2031%0A%2043%20%20%20%20%20%20231%20%20%20%20ADD%2031%0A%2044%20%20%20%20%20%20000%20%20%20%20the%20way%20back%0A%2045%20%20%20%20%20%20199%20%20%20%20CLA%2099%20%20cells%2045-49%3A%20ten%20times%20the%20card%0A%2046%20%20%20%20%20%20649%20%20%20%20STO%2049%0A%2047%20%20%20%20%20%20131%20%20%20%20CLA%2031%0A%2048%20%20%20%20%20%20410%20%20%20%20SFT%2010%0A%2049%20%20%20%20%20%20000%20%20%20%20the%20way%20back%0A&in=40%203%205%20-1)
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=call-a-routine-through-its-address-2&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20030%20%20%20%20INP%2030%20%20cells%2010-13%3A%20the%20function%20is%20its%20address%3B%20JMP%2000%20plus%20the%20address%20is%20the%20call%0A%2011%20%20%20%20%20%20130%20%20%20%20CLA%2030%0A%2012%20%20%20%20%20%20233%20%20%20%20ADD%2033%0A%2013%20%20%20%20%20%20617%20%20%20%20STO%2017%0A%2014%20%20%20%20%20%20031%20%20%20%20INP%2031%20%20cells%2014-21%3A%20each%20card%20until%20a%20negative%20one%3A%20call%20the%20function%2C%20print%20what%20came%20back%0A%2015%20%20%20%20%20%20131%20%20%20%20CLA%2031%0A%2016%20%20%20%20%20%20321%20%20%20%20TAC%2021%0A%2017%20%20%20%20%20%20800%20%20%20%20JMP%2000%20%20JMP%20f%2C%20written%20by%20cell%2013%0A%2018%20%20%20%20%20%20632%20%20%20%20STO%2032%0A%2019%20%20%20%20%20%20532%20%20%20%20OUT%2032%0A%2020%20%20%20%20%20%20814%20%20%20%20JMP%2014%0A%2021%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2030%20%20%20%20%20%20000%20%20%20%20the%20function%27s%20address%0A%2031%20%20%20%20%20%20000%20%20%20%20the%20card%0A%2032%20%20%20%20%20%20000%0A%2033%20%20%20%20%20%20800%20%20%20%20JMP%2000%0A%2040%20%20%20%20%20%20199%20%20%20%20CLA%2099%20%20cells%2040-44%3A%20double%20the%20card%0A%2041%20%20%20%20%20%20644%20%20%20%20STO%2044%0A%2042%20%20%20%20%20%20131%20%20%20%20CLA%2031%0A%2043%20%20%20%20%20%20231%20%20%20%20ADD%2031%0A%2044%20%20%20%20%20%20000%20%20%20%20the%20return%20address%0A%2045%20%20%20%20%20%20199%20%20%20%20CLA%2099%20%20cells%2045-49%3A%20ten%20times%20the%20card%0A%2046%20%20%20%20%20%20649%20%20%20%20STO%2049%0A%2047%20%20%20%20%20%20131%20%20%20%20CLA%2031%0A%2048%20%20%20%20%20%20410%20%20%20%20SFT%2010%0A%2049%20%20%20%20%20%20000%20%20%20%20the%20return%20address%0A&in=40%203%205%20-1)
 
    Doubling 3 and 5 prints 6 and 10 both ways. Testing takes 26 cells and runs 35 instructions; calling through the
    address takes 26 cells and runs 32. Each card costs 12 instructions instead of 14 or 15, and making the call costs
@@ -2227,7 +2227,7 @@ about where things live.
     57      671    STO 71
     58      326    TAC 26
     59      900    HRS 00
-    60      199    CLA 99  cells 60-68: read a roll into the array: copy the way back, step the STO in cell 67, and leave the roll in the accumulator
+    60      199    CLA 99  cells 60-68: read a roll into the array: copy the return address, step the STO in cell 67, and leave the roll in the accumulator
     61      668    STO 68
     62      069    INP 69
     63      167    CLA 67
@@ -2268,7 +2268,7 @@ about where things live.
    ```
    <!-- input: 10 7 3 9 0 10 0 8 8 2 0 6 10 10 10 8 1 -->
 
-   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=owe-the-bonus-dont-look-ahead-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20860%20%20%20%20JMP%2060%20%20cells%2010-18%3A%20read%20frames%201-9%2C%20one%20roll%20for%20a%20strike%20and%20two%20otherwise%0A%2011%20%20%20%20%20%20776%20%20%20%20SUB%2076%0A%2012%20%20%20%20%20%20314%20%20%20%20TAC%2014%0A%2013%20%20%20%20%20%20815%20%20%20%20JMP%2015%0A%2014%20%20%20%20%20%20860%20%20%20%20JMP%2060%0A%2015%20%20%20%20%20%20170%20%20%20%20CLA%2070%0A%2016%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2017%20%20%20%20%20%20670%20%20%20%20STO%2070%0A%2018%20%20%20%20%20%20310%20%20%20%20TAC%2010%0A%2019%20%20%20%20%20%20860%20%20%20%20JMP%2060%20%20cells%2019-25%3A%20the%20tenth%20frame%3A%20two%20rolls%2C%20and%20a%20third%20after%20a%20strike%20or%20a%20spare%0A%2020%20%20%20%20%20%20673%20%20%20%20STO%2073%0A%2021%20%20%20%20%20%20860%20%20%20%20JMP%2060%0A%2022%20%20%20%20%20%20273%20%20%20%20ADD%2073%0A%2023%20%20%20%20%20%20776%20%20%20%20SUB%2076%0A%2024%20%20%20%20%20%20326%20%20%20%20TAC%2026%0A%2025%20%20%20%20%20%20860%20%20%20%20JMP%2060%0A%2026%20%20%20%20%20%20178%20%20%20%20CLA%2078%20%20cells%2026-37%3A%20copy%20rolls%20i%2C%20i%2B1%20and%20i%2B2%20into%20cells%2073-75%3B%20cell%2026%20is%20CLA%2078%20%2B%20i%0A%2027%20%20%20%20%20%20673%20%20%20%20STO%2073%0A%2028%20%20%20%20%20%20126%20%20%20%20CLA%2026%0A%2029%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2030%20%20%20%20%20%20626%20%20%20%20STO%2026%0A%2031%20%20%20%20%20%20634%20%20%20%20STO%2034%0A%2032%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2033%20%20%20%20%20%20636%20%20%20%20STO%2036%0A%2034%20%20%20%20%20%20100%20%20%20%20CLA%2000%0A%2035%20%20%20%20%20%20674%20%20%20%20STO%2074%0A%2036%20%20%20%20%20%20100%20%20%20%20CLA%2000%0A%2037%20%20%20%20%20%20675%20%20%20%20STO%2075%0A%2038%20%20%20%20%20%20173%20%20%20%20CLA%2073%20%20cells%2038-43%3A%20a%20strike%20scores%2010%20%2B%20the%20next%20two%20rolls%2C%20and%20the%20frame%20is%20one%20roll%0A%2039%20%20%20%20%20%20776%20%20%20%20SUB%2076%0A%2040%20%20%20%20%20%20344%20%20%20%20TAC%2044%0A%2041%20%20%20%20%20%20174%20%20%20%20CLA%2074%0A%2042%20%20%20%20%20%20275%20%20%20%20ADD%2075%0A%2043%20%20%20%20%20%20851%20%20%20%20JMP%2051%0A%2044%20%20%20%20%20%20136%20%20%20%20CLA%2036%20%20cells%2044-50%3A%20otherwise%20the%20frame%20is%20two%20rolls%3B%20a%20spare%20scores%2010%20%2B%20the%20next%20roll%2C%20an%20open%20frame%20its%20two%20rolls%0A%2045%20%20%20%20%20%20626%20%20%20%20STO%2026%0A%2046%20%20%20%20%20%20173%20%20%20%20CLA%2073%0A%2047%20%20%20%20%20%20274%20%20%20%20ADD%2074%0A%2048%20%20%20%20%20%20776%20%20%20%20SUB%2076%0A%2049%20%20%20%20%20%20351%20%20%20%20TAC%2051%0A%2050%20%20%20%20%20%20275%20%20%20%20ADD%2075%0A%2051%20%20%20%20%20%20276%20%20%20%20ADD%2076%20%20cells%2051-59%3A%20add%20the%2010%2C%20add%20the%20frame%20to%20the%20score%20and%20output%20it%2C%20ten%20times%0A%2052%20%20%20%20%20%20272%20%20%20%20ADD%2072%0A%2053%20%20%20%20%20%20672%20%20%20%20STO%2072%0A%2054%20%20%20%20%20%20572%20%20%20%20OUT%2072%0A%2055%20%20%20%20%20%20171%20%20%20%20CLA%2071%0A%2056%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2057%20%20%20%20%20%20671%20%20%20%20STO%2071%0A%2058%20%20%20%20%20%20326%20%20%20%20TAC%2026%0A%2059%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2060%20%20%20%20%20%20199%20%20%20%20CLA%2099%20%20cells%2060-68%3A%20read%20a%20roll%20into%20the%20array%3A%20copy%20the%20way%20back%2C%20step%20the%20STO%20in%20cell%2067%2C%20and%20leave%20the%20roll%20in%20the%20accumulator%0A%2061%20%20%20%20%20%20668%20%20%20%20STO%2068%0A%2062%20%20%20%20%20%20069%20%20%20%20INP%2069%0A%2063%20%20%20%20%20%20167%20%20%20%20CLA%2067%0A%2064%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2065%20%20%20%20%20%20667%20%20%20%20STO%2067%0A%2066%20%20%20%20%20%20169%20%20%20%20CLA%2069%0A%2067%20%20%20%20%20%20677%20%20%20%20STO%2077%0A%2068%20%20%20%20%20%20800%20%20%20%20JMP%2000%0A%2069%20%20%20%20%20%20000%20%20%20%20the%20roll%0A%2070%20%20%20%20%20-009%20%20%20%20frames%201-9%20still%20to%20read%0A%2071%20%20%20%20%20-010%20%20%20%20frames%20still%20to%20score%0A%2072%20%20%20%20%20%20000%20%20%20%20the%20score%0A%2073%20%20%20%20%20%20000%20%20%20%20rolls%20i%2C%20i%2B1%20and%20i%2B2%0A%2074%20%20%20%20%20%20000%0A%2075%20%20%20%20%20%20000%0A%2076%20%20%20%20%20%20010%0A%2078%20%20%20%20%20%20000%20%20%20%20cells%2078-98%3A%20the%20rolls%2C%20up%20to%2021%0A%2079%20%20%20%20%20%20000%0A%2080%20%20%20%20%20%20000%0A%2081%20%20%20%20%20%20000%0A%2082%20%20%20%20%20%20000%0A%2083%20%20%20%20%20%20000%0A%2084%20%20%20%20%20%20000%0A%2085%20%20%20%20%20%20000%0A%2086%20%20%20%20%20%20000%0A%2087%20%20%20%20%20%20000%0A%2088%20%20%20%20%20%20000%0A%2089%20%20%20%20%20%20000%0A%2090%20%20%20%20%20%20000%0A%2091%20%20%20%20%20%20000%0A%2092%20%20%20%20%20%20000%0A%2093%20%20%20%20%20%20000%0A%2094%20%20%20%20%20%20000%0A%2095%20%20%20%20%20%20000%0A%2096%20%20%20%20%20%20000%0A%2097%20%20%20%20%20%20000%0A%2098%20%20%20%20%20%20000%0A&in=10%207%203%209%200%2010%200%208%208%202%200%206%2010%2010%2010%208%201)
+   [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=owe-the-bonus-dont-look-ahead-1&cq=cell%20%20contents%20%20notes%0A%2010%20%20%20%20%20%20860%20%20%20%20JMP%2060%20%20cells%2010-18%3A%20read%20frames%201-9%2C%20one%20roll%20for%20a%20strike%20and%20two%20otherwise%0A%2011%20%20%20%20%20%20776%20%20%20%20SUB%2076%0A%2012%20%20%20%20%20%20314%20%20%20%20TAC%2014%0A%2013%20%20%20%20%20%20815%20%20%20%20JMP%2015%0A%2014%20%20%20%20%20%20860%20%20%20%20JMP%2060%0A%2015%20%20%20%20%20%20170%20%20%20%20CLA%2070%0A%2016%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2017%20%20%20%20%20%20670%20%20%20%20STO%2070%0A%2018%20%20%20%20%20%20310%20%20%20%20TAC%2010%0A%2019%20%20%20%20%20%20860%20%20%20%20JMP%2060%20%20cells%2019-25%3A%20the%20tenth%20frame%3A%20two%20rolls%2C%20and%20a%20third%20after%20a%20strike%20or%20a%20spare%0A%2020%20%20%20%20%20%20673%20%20%20%20STO%2073%0A%2021%20%20%20%20%20%20860%20%20%20%20JMP%2060%0A%2022%20%20%20%20%20%20273%20%20%20%20ADD%2073%0A%2023%20%20%20%20%20%20776%20%20%20%20SUB%2076%0A%2024%20%20%20%20%20%20326%20%20%20%20TAC%2026%0A%2025%20%20%20%20%20%20860%20%20%20%20JMP%2060%0A%2026%20%20%20%20%20%20178%20%20%20%20CLA%2078%20%20cells%2026-37%3A%20copy%20rolls%20i%2C%20i%2B1%20and%20i%2B2%20into%20cells%2073-75%3B%20cell%2026%20is%20CLA%2078%20%2B%20i%0A%2027%20%20%20%20%20%20673%20%20%20%20STO%2073%0A%2028%20%20%20%20%20%20126%20%20%20%20CLA%2026%0A%2029%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2030%20%20%20%20%20%20626%20%20%20%20STO%2026%0A%2031%20%20%20%20%20%20634%20%20%20%20STO%2034%0A%2032%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2033%20%20%20%20%20%20636%20%20%20%20STO%2036%0A%2034%20%20%20%20%20%20100%20%20%20%20CLA%2000%0A%2035%20%20%20%20%20%20674%20%20%20%20STO%2074%0A%2036%20%20%20%20%20%20100%20%20%20%20CLA%2000%0A%2037%20%20%20%20%20%20675%20%20%20%20STO%2075%0A%2038%20%20%20%20%20%20173%20%20%20%20CLA%2073%20%20cells%2038-43%3A%20a%20strike%20scores%2010%20%2B%20the%20next%20two%20rolls%2C%20and%20the%20frame%20is%20one%20roll%0A%2039%20%20%20%20%20%20776%20%20%20%20SUB%2076%0A%2040%20%20%20%20%20%20344%20%20%20%20TAC%2044%0A%2041%20%20%20%20%20%20174%20%20%20%20CLA%2074%0A%2042%20%20%20%20%20%20275%20%20%20%20ADD%2075%0A%2043%20%20%20%20%20%20851%20%20%20%20JMP%2051%0A%2044%20%20%20%20%20%20136%20%20%20%20CLA%2036%20%20cells%2044-50%3A%20otherwise%20the%20frame%20is%20two%20rolls%3B%20a%20spare%20scores%2010%20%2B%20the%20next%20roll%2C%20an%20open%20frame%20its%20two%20rolls%0A%2045%20%20%20%20%20%20626%20%20%20%20STO%2026%0A%2046%20%20%20%20%20%20173%20%20%20%20CLA%2073%0A%2047%20%20%20%20%20%20274%20%20%20%20ADD%2074%0A%2048%20%20%20%20%20%20776%20%20%20%20SUB%2076%0A%2049%20%20%20%20%20%20351%20%20%20%20TAC%2051%0A%2050%20%20%20%20%20%20275%20%20%20%20ADD%2075%0A%2051%20%20%20%20%20%20276%20%20%20%20ADD%2076%20%20cells%2051-59%3A%20add%20the%2010%2C%20add%20the%20frame%20to%20the%20score%20and%20output%20it%2C%20ten%20times%0A%2052%20%20%20%20%20%20272%20%20%20%20ADD%2072%0A%2053%20%20%20%20%20%20672%20%20%20%20STO%2072%0A%2054%20%20%20%20%20%20572%20%20%20%20OUT%2072%0A%2055%20%20%20%20%20%20171%20%20%20%20CLA%2071%0A%2056%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2057%20%20%20%20%20%20671%20%20%20%20STO%2071%0A%2058%20%20%20%20%20%20326%20%20%20%20TAC%2026%0A%2059%20%20%20%20%20%20900%20%20%20%20HRS%2000%0A%2060%20%20%20%20%20%20199%20%20%20%20CLA%2099%20%20cells%2060-68%3A%20read%20a%20roll%20into%20the%20array%3A%20copy%20the%20return%20address%2C%20step%20the%20STO%20in%20cell%2067%2C%20and%20leave%20the%20roll%20in%20the%20accumulator%0A%2061%20%20%20%20%20%20668%20%20%20%20STO%2068%0A%2062%20%20%20%20%20%20069%20%20%20%20INP%2069%0A%2063%20%20%20%20%20%20167%20%20%20%20CLA%2067%0A%2064%20%20%20%20%20%20200%20%20%20%20ADD%2000%0A%2065%20%20%20%20%20%20667%20%20%20%20STO%2067%0A%2066%20%20%20%20%20%20169%20%20%20%20CLA%2069%0A%2067%20%20%20%20%20%20677%20%20%20%20STO%2077%0A%2068%20%20%20%20%20%20800%20%20%20%20JMP%2000%0A%2069%20%20%20%20%20%20000%20%20%20%20the%20roll%0A%2070%20%20%20%20%20-009%20%20%20%20frames%201-9%20still%20to%20read%0A%2071%20%20%20%20%20-010%20%20%20%20frames%20still%20to%20score%0A%2072%20%20%20%20%20%20000%20%20%20%20the%20score%0A%2073%20%20%20%20%20%20000%20%20%20%20rolls%20i%2C%20i%2B1%20and%20i%2B2%0A%2074%20%20%20%20%20%20000%0A%2075%20%20%20%20%20%20000%0A%2076%20%20%20%20%20%20010%0A%2078%20%20%20%20%20%20000%20%20%20%20cells%2078-98%3A%20the%20rolls%2C%20up%20to%2021%0A%2079%20%20%20%20%20%20000%0A%2080%20%20%20%20%20%20000%0A%2081%20%20%20%20%20%20000%0A%2082%20%20%20%20%20%20000%0A%2083%20%20%20%20%20%20000%0A%2084%20%20%20%20%20%20000%0A%2085%20%20%20%20%20%20000%0A%2086%20%20%20%20%20%20000%0A%2087%20%20%20%20%20%20000%0A%2088%20%20%20%20%20%20000%0A%2089%20%20%20%20%20%20000%0A%2090%20%20%20%20%20%20000%0A%2091%20%20%20%20%20%20000%0A%2092%20%20%20%20%20%20000%0A%2093%20%20%20%20%20%20000%0A%2094%20%20%20%20%20%20000%0A%2095%20%20%20%20%20%20000%0A%2096%20%20%20%20%20%20000%0A%2097%20%20%20%20%20%20000%0A%2098%20%20%20%20%20%20000%0A&in=10%207%203%209%200%2010%200%208%208%202%200%206%2010%2010%2010%208%201)
 
    But a frame never waits on more than the next two rolls, so what it needs isn't the rolls. It needs to know what
    it's still owed. Read the rolls one at a time, and let a strike or a spare wait until its bonus rolls have come
