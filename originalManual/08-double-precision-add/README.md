@@ -5,7 +5,7 @@ significant digits in the first. The main program reads the numbers and calls th
 op code 8; the subroutine takes its return address from cell 99, adds the low halves, carries, adds the high
 halves, and returns.
 
-- `double-precision-add.cardiac`: the subroutine and the main program as printed.
+- `double-precision-add.cq`: the subroutine and the main program as printed.
 - `double-precision-add.deck`: the deck. No input cards. Cell 94 ("8__") has no card: the subroutine writes
   it (cells 86-87) before it gets there.
 - [Open in Cardigan](https://lab.strangequery.com/cardigan/ide/#name=double-precision-add&cqb=002%0A800%0A086%0A199%0A087%0A694%0A088%0A196%0A089%0A298%0A090%0A698%0A091%0A403%0A092%0A295%0A093%0A297%0A050%0A095%0A051%0A096%0A052%0A097%0A053%0A098%0A054%0A886%0A055%0A659%0A056%0A559%0A057%0A598%0A058%0A900%0A002%0A850%0A&in=163%20742%20258%20500), with 163, 742, 258 and 500 on the input cards.

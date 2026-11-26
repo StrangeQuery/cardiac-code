@@ -10,5 +10,5 @@ CARDIAC programs to read, run and learn from. They are part of Strange Query's
 - [`sortem`](sortem/) sorts the numbers it reads, and its two-tape version shows how to run a program too big for
   memory.
 
-Each program comes as a listing (`.cardiac`) and a deck (`.deck`). You can run them in
+Each program comes as a listing (`.cq`) and a deck (`.deck`). You can run them in
 [Cardigan](https://lab.strangequery.com/cardigan/) or with `burn` from [heartburn](https://lab.strangequery.com/heartburn/).
